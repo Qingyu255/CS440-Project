@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MongoClient } from 'mongodb';
 import { modeIds } from '../src/server.mjs';
+import { probeScripting } from '../src/control-probes.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const base='http://127.0.0.1:4400';
@@ -26,6 +27,7 @@ const cases=[
 ];
 const environment=await(await fetch(base+'/api/health')).json();
 assert.equal(environment.ready,true);
+const packageInfo=JSON.parse(await fs.readFile(path.join(root,'package.json'),'utf8'));
 const config=JSON.parse(await fs.readFile(path.join(root,'.state','config.json'),'utf8'));
 const results=[];
 const main = new MongoClient(config.main,{monitorCommands:true});
@@ -43,7 +45,8 @@ for(let repetition=1;repetition<=2;repetition++) {
       assert.equal(body.trace.authenticated,expected===200,`${mode}/${test.id} session decision`);
       assert.equal(body.trace.databaseQueried,expected!==400,`${mode}/${test.id} query occurrence`);
       assert.equal(body.trace.findCommands,expected===400?0:1,`${mode}/${test.id} observed find commands`);
-      const cookie=response.headers.get('set-cookie')?.split(',').reverse().find(x=>x.includes('cs440_session=')&&!x.includes('cs440_session=;'))?.trim().split(';')[0];
+      const cookie=response.headers.getSetCookie().find(x=>/^cs440_session=[a-f0-9]{64};/.test(x))?.split(';')[0];
+      assert.equal(Boolean(cookie), expected === 200, `${mode}/${test.id} usable session cookie`);
       const protectedResponse=await fetch(base+'/api/protected',{headers:cookie?{Cookie:cookie}:{}});
       assert.equal(protectedResponse.status,expected===200?200:401,`${mode}/${test.id} protected page`);
       const protectedBody=await protectedResponse.json();
@@ -59,17 +62,13 @@ for(const [id,uri] of [['main',config.main],['noscripting',config.noscripting],[
   const db=client.db('cs440_lab');
   const connection=await db.command({connectionStatus:1});
   controls[id]={authenticatedUsers:connection.authInfo.authenticatedUsers,authenticatedRoles:connection.authInfo.authenticatedUserRoles};
+  assert.deepEqual(controls[id].authenticatedRoles, [{ role: id === 'readonly' ? 'read' : 'readWrite', db: 'cs440_lab' }], `${id} actual database role`);
   if(id==='readonly') {
     assert.equal((await db.collection('users').findOne({username:'alice'})).username,'alice');
     try{await db.collection('users').insertOne({username:'unexpected-write'});assert.fail('Read-only account unexpectedly wrote');}
     catch(error){assert.equal(error.code,13);controls[id].writeDenied=true;controls[id].writeError=error.codeName;}
   }
-  if(id==='main'||id==='noscripting') {
-    try {
-      const result=await db.collection('users').findOne({$where:'this.username === "alice"'});
-      assert.equal(id,'main');assert.equal(result.username,'alice');controls[id].whereAllowed=true;
-    } catch(error) {if(id==='main')throw error;controls[id].whereAllowed=false;controls[id].whereError=error.codeName??error.name;controls[id].whereErrorCode=error.code;}
-  }
+  if(id==='main'||id==='noscripting') Object.assign(controls[id], await probeScripting(db.collection('users'), { disabled: id === 'noscripting' }));
   await client.close();
 }
 assert.equal(controls.main.whereAllowed,true);assert.equal(controls.noscripting.whereAllowed,false);
@@ -77,7 +76,7 @@ for(const mode of modeIds){
   const malformed=await fetch(base+'/api/login/'+mode,{method:'POST',headers:{'Content-Type':'application/json'},body:'{"username":'});assert.equal(malformed.status,400);
   const deniedOrigin=await fetch(base+'/api/login/'+mode,{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://example.invalid'},body:JSON.stringify(cases[0].body)});assert.equal(deniedOrigin.status,403);
 }
-const evidence={schemaVersion:1,recordedAt:new Date().toISOString(),environment:{...environment,express:'5.1.0',mongodbDriver:'6.20.0',passwordHash:'scrypt N=131072 r=8 p=1, 16-byte random salt, 64-byte output'},method:{cases:cases.length,configurations:modeIds.length,repetitions:2,totalHttpCases:results.length,additionalHttpChecks:10,scope:'One local Node/Express/native-driver stack; synthetic plaintext reproduction and separate hash-verifying path'},controls,results};
+const evidence={schemaVersion:1,recordedAt:new Date().toISOString(),environment:{...environment,express:packageInfo.dependencies.express,mongodbDriver:packageInfo.dependencies.mongodb,passwordHash:'scrypt N=131072 r=8 p=1, 16-byte random salt, 64-byte output'},method:{cases:cases.length,configurations:modeIds.length,repetitions:2,totalHttpCases:results.length,additionalHttpChecks:10,scope:'One local Node/Express/native-driver stack; synthetic plaintext reproduction and separate hash-verifying path'},controls,results};
 await fs.mkdir(path.join(root,'evidence'),{recursive:true});
 await fs.writeFile(path.join(root,'evidence','results.json'),JSON.stringify(evidence,null,2));
 const columns=['repetition','configuration','caseId','case','status','authenticated','databaseQueried','findCommands','account','protectedStatus'];

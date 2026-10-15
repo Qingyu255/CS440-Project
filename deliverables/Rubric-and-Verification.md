@@ -1,6 +1,6 @@
 # Rubric coverage and verification record
 
-Prepared 8 October 2026. The project briefing combines A/A+ in its highest band; it has no separate A+ checklist. Course weights below come from the briefing. This document records the authored evidence, not a predicted grade.
+Reviewed 15 October 2026. The project briefing combines A/A+ in its highest band; it has no separate A+ checklist. Course weights below come from the briefing. This document records the authored evidence, not a predicted grade.
 
 | Component | Course weight | Evidence in the final pack |
 |---|---:|---|
@@ -10,18 +10,13 @@ Prepared 8 October 2026. The project briefing combines A/A+ in its highest band;
 | Conclusion | 2% | Slides 12-13: evidence-linked findings, engineering lessons, scope and a bounded open problem on client-selected filters with mandatory ownership restrictions |
 | Q&A | Within relevant components | Appendices 14-24 and 25-question defence pack; environment, code, case tables, independent controls, actual captures, limits and references |
 
-## Completed checks
+## Evidence and preparation
 
-- Native lab startup executed successfully with two dedicated authenticated MongoDB instances bound to loopback.
-- Occupied app-port startup refused before any database connection. Existing services are not reused.
-- Experiment passes 150 login configuration/case observations, 150 protected-access checks and 10 additional malformed/origin HTTP checks.
-- Independent read-only-role and disabled-scripting checks passed.
-- The hardened collection contains no plaintext password property; valid credentials still succeed.
-- Deck package integrity and geometry validation passed with zero findings and zero layout warnings. The 24-slide file re-imported successfully. Seven editable native tables are present.
-- All 24 authored slide renders and all 24 PDF pages were visually reviewed. Required diagram direction, appendix table fit and browser evidence framing were checked.
-- PDF exported through LibreOffice. PowerPoint-specific rendering has not been verified; inspect the file on the presentation machine.
-- Offline video checked as H.264, 1920 x 1080, 90.000 seconds. It is a sequence of captured states, not a continuous recording.
-- ZIP manifest checked for exclusion of generated credentials, database state, node_modules and caches.
+The lab records 150 login configuration/case observations and a protected-endpoint check for each, plus independent configuration probes. Supplementary regressions check session carry-over, content type, logout, request size and startup isolation. Control-probe unit tests specifically prevent unexpected success or unrelated errors from becoming false evidence.
+
+The 24-slide deck contains seven editable tables and embedded notes. The main talk targets 11:20, including a 90-second demonstration. The offline video shows four real captured states and requires live narration. It is a fallback alongside the readable appendix captures.
+
+See `../research/Claim-Ledger.md` for each claim's source, observation and scope. Test and authoring diagnostics remain separate from the deck.
 
 ## Claim discipline
 

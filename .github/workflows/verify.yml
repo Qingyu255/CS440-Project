@@ -1,0 +1,68 @@
+name: Verify research lab
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lab:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: nosql-lab/package-lock.json
+      - name: Install pinned public packages
+        run: npm ci --prefix nosql-lab
+      - name: Inspect committed evidence and deck
+        run: python3 tools/verify-project.py
+      - name: Obtain the recorded MongoDB version from the official image
+        run: |
+          docker create --name cs440-mongo-binary mongo:7.0.0
+          docker cp cs440-mongo-binary:/usr/bin/mongod "$RUNNER_TEMP/cs440-mongod"
+          docker rm cs440-mongo-binary
+          chmod +x "$RUNNER_TEMP/cs440-mongod"
+          "$RUNNER_TEMP/cs440-mongod" --version
+          echo "MONGOD_BINARY=$RUNNER_TEMP/cs440-mongod" >> "$GITHUB_ENV"
+      - name: Start isolated authenticated lab instances
+        working-directory: nosql-lab
+        run: |
+          npm start > "$RUNNER_TEMP/cs440-lab.log" 2>&1 &
+          lab_pid=$!
+          echo "CS440_LAB_PID=$lab_pid" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent http://127.0.0.1:4400/api/health; then exit 0; fi
+            if ! kill -0 "$lab_pid" 2>/dev/null; then cat "$RUNNER_TEMP/cs440-lab.log"; exit 1; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/cs440-lab.log"
+          exit 1
+      - name: Run controls, experiments and regressions
+        working-directory: nosql-lab
+        run: |
+          rm -f evidence/results.json evidence/results.csv evidence/regressions.json
+          npm run test:all
+      - name: Save redacted CI evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: redacted-lab-evidence
+          path: |
+            nosql-lab/evidence/results.json
+            nosql-lab/evidence/results.csv
+            nosql-lab/evidence/regressions.json
+          retention-days: 14
+      - name: Stop only this run's lab
+        if: always()
+        run: |
+          if [ -n "${CS440_LAB_PID:-}" ]; then kill -TERM "$CS440_LAB_PID" 2>/dev/null || true; fi

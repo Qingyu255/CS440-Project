@@ -1,5 +1,7 @@
 # CS440 NoSQL Injections: a research and presentation plan for the A/A+ band
 
+Execution update, 15 October 2026: the implemented deck, lab and measured results are now in this repository. See README.md and research/Claim-Ledger.md. The original proposal below remains as the design record.
+
 Prepared 7 October 2026. This is a proposed investigation and deck blueprint. No demo or experiment has been run as part of preparing this plan. All experimental outcomes below are hypotheses or acceptance criteria until your group records them.
 
 ## 1. Recommended direction
@@ -18,7 +20,7 @@ Show conviction through the quality of your questions and evidence. Your group s
 
 ## 2. What the briefing actually requires
 
-Source: [CS440 Group Project Briefing](</Users/qingyuliu/Desktop/Y4S1/CS440/week3/CS440 - Group Project Briefing.pdf>), especially pages 3-6.
+Source: CS440 Group Project Briefing (supplied separately), especially pages 3-6.
 
 The published rubric combines **A and A+** in one band. It does not provide a separate A+ threshold. The recommendations in this plan aim to make the work especially strong within that highest band.
 

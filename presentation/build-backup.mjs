@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const frames=[['01-request.jpg',5],['01-outcome.jpg',10],['02-request.jpg',10],['02-outcome.jpg',15],['03-request.jpg',10],['03-outcome.jpg',15],['04-request.jpg',10],['04-outcome.jpg',15]];
+const build=path.join(root,'.build');await fs.mkdir(build,{recursive:true});
+const lines=frames.flatMap(([name,duration])=>[`file '../nosql-lab/evidence/browser/${name}'`,`duration ${duration}`]);
+lines.push("file '../nosql-lab/evidence/browser/04-outcome.jpg'");
+const concat=path.join(build,'backup-frames.txt');await fs.writeFile(concat,lines.join('\n')+'\n');
+const captions=path.join(root,'presentation/Demo-Backup-Captions.srt');
+const result=spawnSync('ffmpeg',['-v','warning','-y','-f','concat','-safe','0','-i',concat,'-i',captions,'-vf','scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:color=0xF6F6F2,setsar=1','-r','25','-t','90','-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p','-c:s','mov_text','-disposition:s:0','default','-metadata','title=CS440 NoSQL: four captured states, request and outcome views','-movflags','+faststart',path.join(root,'deliverables/Demo-Backup-90s.mp4')],{stdio:'inherit'});
+if(result.error)throw result.error;
+if(result.status!==0)process.exitCode=result.status??1;

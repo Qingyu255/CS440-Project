@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:04,999
+1/4: Baseline / wrong password / request
+
+2
+00:00:05,000 --> 00:00:14,999
+Observed: HTTP 401 / protected access denied
+
+3
+00:00:15,000 --> 00:00:24,999
+2/4: Baseline / operator object / request
+
+4
+00:00:25,000 --> 00:00:39,999
+Observed: Alice authenticated without her password
+
+5
+00:00:40,000 --> 00:00:49,999
+3/4: Hardened / identical operator object
+
+6
+00:00:50,000 --> 00:01:04,999
+Observed: no database query / no session
+
+7
+00:01:05,000 --> 00:01:14,999
+4/4: Hardened / valid credentials
+
+8
+00:01:15,000 --> 00:01:29,999
+Observed: legitimate login still succeeds

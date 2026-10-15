@@ -60,7 +60,7 @@ The evidence in this pack comes from `nosql-lab/evidence/results.json` and the s
 
 **Short answer:** It did not stop C04. The attack uses a normal query operator.
 
-**Technical follow-up:** We separately tested a harmless `$where` expression. It succeeds on the scripting-enabled instance and fails with error 6108304 on the instance launched with `--noscripting`. This confirms that scripting was actually disabled. C04 still creates an Alice session on that instance.
+**Technical follow-up:** We separately tested a harmless `$where` expression. It succeeds on the scripting-enabled instance and fails with error 6108304 on the instance launched with `--noscripting`. The runner requires that specific MongoDB error. Unexpected execution, network failures, unrelated database errors and assertion failures make the check fail. This confirms that scripting was actually disabled. C04 still creates an Alice session on that instance.
 
 **Evidence:** Appendix 19 and `controls.noscripting` in results.json.
 
@@ -175,3 +175,12 @@ Run one practice round in which each person answers a question outside their ass
 - Can the speaker point to the appropriate appendix or evidence file?
 
 If a question goes beyond the experiment, give the established result and explain the additional test needed. Avoid inventing a confident answer to preserve the appearance of expertise.
+
+
+## Experiment-integrity challenges
+
+**Could an old cookie make a rejected request appear successful?** The supplementary regressions first authenticate, then send a failed login using that existing cookie and replay the old token against the protected endpoint. They require access to fail. The two validated modes also run this sequence with the operator object. The ordinary matrix's protected checks alone would not establish old-token revocation.
+
+**What if your control check is broken?** Unit tests deliberately make the disabled-scripting probe execute successfully or fail for unrelated reasons. Those paths must fail the observation. The live probe must receive the specific MongoDB scripting-disabled error. We test the measurement mechanism as well as the application.
+
+**Why is this an extension rather than a new vulnerability?** The injection is prior work. The extension is the controlled comparison and inspectable evidence connecting request shape, actual command issuance, session creation and protected access. Our claim ledger identifies those boundaries.

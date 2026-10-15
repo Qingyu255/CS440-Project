@@ -1,11 +1,11 @@
 # CS440 NoSQL Injections: complete project pack
 
-Start with `deliverables/CS440-NoSQL-Injections-Ready.pptx`. It contains 13 main slides and 11 appendices. Main-slide speaker notes and the separate script target 11:20, including a 90-second demo. This duration is a rehearsal target.
+Start with `deliverables/CS440-NoSQL-Injections-Reviewed.pptx`. It contains 13 main slides and 11 appendices. Main-slide speaker notes and the separate script target 11:20, including a 90-second demo. This duration is a rehearsal target.
 
 ## Files
 
-- `deliverables/CS440-NoSQL-Injections-Ready.pptx`: editable deck, native diagrams and tables, embedded speaker notes and source URLs.
-- `deliverables/CS440-NoSQL-Injections-Ready.pdf`: portable 24-page copy; speaker notes stay in the PPTX and script.
+- `deliverables/CS440-NoSQL-Injections-Reviewed.pptx`: editable deck, native diagrams and tables, embedded speaker notes and source URLs.
+- `deliverables/CS440-NoSQL-Injections-Reviewed.pdf`: portable 24-page copy; speaker notes stay in the PPTX and script.
 - `deliverables/Speaker-Script.md`: complete timed main-talk script.
 - `deliverables/Q-and-A-Defence-Pack.md`: 25 questions, short answers, technical follow-ups and evidence references.
 - `deliverables/Demo-and-Rehearsal-Guide.md`: demo operation, fallbacks, handovers and rehearsal gates.
@@ -24,7 +24,7 @@ npm ci
 npm start
 ```
 
-Wait for LOCAL LAB READY. Open http://127.0.0.1:4400. In a second terminal, run `npm test`. The recorded stack is MongoDB 7.0.0, Node v23.6.1, Express 5.1.0 and driver 6.20.0 on macOS arm64. Other environments need their own recorded test run.
+Wait for LOCAL LAB READY. Open http://127.0.0.1:4400. In a second terminal, run `npm run test:all`. The recorded stack is MongoDB 7.0.0, Node v23.6.1, Express 5.1.0 and driver 6.20.0 on macOS arm64. Other environments need their own recorded test run.
 
 ## Remaining group actions
 

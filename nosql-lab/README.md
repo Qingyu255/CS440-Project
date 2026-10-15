@@ -32,12 +32,14 @@ If `mongod` is elsewhere, set `MONGOD_BINARY` to its executable path before star
 Keep the first terminal running. In a second terminal in this folder:
 
 ```sh
-npm test
+npm run test:all
 ```
 
-The experiment runner checks 15 credential cases across five modes, twice. For every login it checks the status, session decision, selected account where deterministic, actual find-command count and protected access. It separately checks that scripting-disabled MongoDB rejects a harmless `$where` predicate and that the read-only account cannot insert a synthetic record. It also checks malformed JSON and requests with a disallowed Origin.
+The complete check runs six control-probe unit tests, the experiment matrix and supplementary regressions. The experiment runner checks 15 credential cases across five modes, twice. For every login it checks the status, session decision, selected account where deterministic, actual find-command count and protected access. It separately checks that scripting-disabled MongoDB rejects a harmless `$where` predicate and that the read-only account cannot insert a synthetic record. It also checks malformed JSON and requests with a disallowed Origin.
 
-The recorded run passes 150 login configuration/case checks, 150 protected-access checks and 10 additional HTTP checks. It also checks the database controls and absence of plaintext passwords in `accounts_hashed`.
+The recorded run passes 150 login configuration/case checks, 150 protected-access checks and 10 additional HTTP checks. It also checks the actual database roles, requires the specific MongoDB scripting-disabled error, and verifies the absence of plaintext passwords in `accounts_hashed`. A successful scripting probe, assertion failure, connection failure or unrelated database error fails the control check.
+
+Supplementary checks verify revocation of existing session tokens after a failed login, contract rejection and logout. They also check JSON content type, the request-size limit and refusal to start on an occupied port. Their separate results are in `evidence/regressions.json`; they are not counted as additional matrix cases.
 
 Results are written to `evidence/results.json` and `evidence/results.csv`. A test failure stops the run. Preserve a failing output for investigation rather than reporting success from an earlier file.
 
@@ -100,3 +102,7 @@ Recorded results establish this local application mechanism. They do not measure
 Run the lab on the presentation machine before class. Confirm both positive and negative controls, then leave it running. Keep the slide deck and offline demo backup open locally. The first startup performs memory-hard password hashing and should finish before the talk begins.
 
 Do not copy `.state`, `.npm-cache` or `node_modules` into a shared submission. Share the supplied source, lockfile and redacted evidence. The project ZIP excludes those generated directories.
+
+## CI
+
+The GitHub workflow runs the lab on an Ubuntu 22.04 runner with Node 22 and a MongoDB 7.0.0 binary copied from the official Mongo image. It runs the same checks and uploads redacted evidence. CI is another environment, so use its recorded metadata when describing that run. It verifies the lab and existing deck contracts; presentation rendering remains a visual review.

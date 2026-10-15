@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T11:18:36.848Z",
+  "httpChecks": 35,
+  "checkCount": 15,
+  "results": [
+    {
+      "check": "failed-login-revokes-existing-session",
+      "mode": "baseline",
+      "passed": true
+    },
+    {
+      "check": "failed-login-revokes-existing-session",
+      "mode": "noscripting",
+      "passed": true
+    },
+    {
+      "check": "failed-login-revokes-existing-session",
+      "mode": "readonly",
+      "passed": true
+    },
+    {
+      "check": "failed-login-revokes-existing-session",
+      "mode": "validated",
+      "passed": true
+    },
+    {
+      "check": "failed-login-revokes-existing-session",
+      "mode": "hardened",
+      "passed": true
+    },
+    {
+      "check": "contract-rejection-revokes-existing-session",
+      "mode": "validated",
+      "passed": true
+    },
+    {
+      "check": "contract-rejection-revokes-existing-session",
+      "mode": "hardened",
+      "passed": true
+    },
+    {
+      "check": "JSON-content-type-required-before-find",
+      "mode": "baseline",
+      "passed": true
+    },
+    {
+      "check": "JSON-content-type-required-before-find",
+      "mode": "noscripting",
+      "passed": true
+    },
+    {
+      "check": "JSON-content-type-required-before-find",
+      "mode": "readonly",
+      "passed": true
+    },
+    {
+      "check": "JSON-content-type-required-before-find",
+      "mode": "validated",
+      "passed": true
+    },
+    {
+      "check": "JSON-content-type-required-before-find",
+      "mode": "hardened",
+      "passed": true
+    },
+    {
+      "check": "logout-invalidates-token",
+      "passed": true
+    },
+    {
+      "check": "request-size-limit",
+      "passed": true
+    },
+    {
+      "check": "occupied-port-refuses-start-before-database-contact",
+      "passed": true
+    }
+  ]
+}

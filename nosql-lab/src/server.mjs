@@ -85,6 +85,8 @@ export async function startApp(config) {
       res.status(status).json({...body,trace});
     }
     try {
+      if (!req.is('application/json')) return await finish(415,{error:'JSON content type required'});
+      if (req.body === undefined) return await finish(400,{error:'JSON request body required'});
       if ((mode === 'validated' || mode === 'hardened') && !validContract(req.body)) {
         return await finish(400,{error:'Credential contract rejected'});
       }

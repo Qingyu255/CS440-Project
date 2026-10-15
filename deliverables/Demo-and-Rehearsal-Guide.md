@@ -4,7 +4,7 @@ The main talk has 13 slides with a target duration of 11:20. Appendices 14-24 su
 
 ## Before presenting
 
-1. Start the local lab using its README. Run `npm test` on the presentation machine before class.
+1. Start the local lab using its README. Run `npm run test:all` on the presentation machine before class.
 2. Open the lab at http://127.0.0.1:4400 and choose the vulnerable baseline.
 3. Open slide 8, then keep the browser ready in another window.
 4. Open `Demo-Backup-90s.mp4` locally. This silent video shows four real captured states and needs live narration.
@@ -27,7 +27,7 @@ Pause for the displayed HTTP outcome. The final hash-verification step may take 
 
 If a process or display fails, switch to the local backup within about ten seconds. Say: “We will use our captured run. The request, predicate and outcome are the same recorded experiment.”
 
-The video is a sequence of four captured browser states, not a continuous screen recording. Its stages last 15, 25, 25 and 25 seconds. The last stage includes the closing sentence. Narrate the evidence. If playback fails too, use the four JPEGs or appendix slides 20 and 21. The main result table preserves all four outcomes.
+The video is a sequence of four captured browser states, not a continuous screen recording. Each stage shows the configuration/request view, followed by an enlarged predicate/decision view. Optional subtitles identify the stages. The stages last 15, 25, 25 and 25 seconds. The last stage includes the closing sentence. Narrate the evidence. If playback fails too, use the four JPEGs or appendix slides 20 and 21. The main result table preserves all four outcomes.
 
 ## Timing and handovers
 
@@ -54,4 +54,4 @@ If the talk exceeds the budget, trim historical detail and repeated explanations
 
 Add your actual group members to the title slide if desired. Every member must understand the complete mechanism, present, attend Q&A and submit the deck as the briefing requires. Confirm the midnight-before-presentation deadline in eLearn.
 
-The files and local experiments are complete. Remaining human steps are the second-machine run, group rehearsal, any lecturer-specific adjustments and individual submission. No group delivery or second-machine execution has been claimed as completed.
+The authored pack and local experiment are complete. CI evidence, when successful, provides an additional runner environment and does not replace your presentation-machine check. Remaining human steps are the second-machine run, group rehearsal, any lecturer-specific adjustments and individual submission. No group delivery or second-machine execution has been claimed as completed.

@@ -14,7 +14,7 @@ Sources: https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-
 
 Target time: 0:50
 
-NoSQL covers several database families. We focus on MongoDB, a document database. Its documents contain named fields, and a filter describes which documents to return. Here, the left-hand query looks for one literal username. The right-hand query uses an operator to match usernames that differ from an empty string. Both filters have structured representations, but they express different predicates. MongoDB sends BSON to the server through its driver. Our web interface receives JSON, which the application parses into JavaScript values. That representation change matters because the application expects credential strings.
+NoSQL covers several database families. We focus on MongoDB, a document database. Its documents contain named fields, and a filter describes which documents to return. Here, the left-hand query looks for one literal username. The right-hand query uses an operator to match usernames that differ from an empty string. Both filters have structured representations, but they express different predicates. The MongoDB driver serialises the filter to BSON for the server. Our web interface receives JSON, which the application parses into JavaScript values. That representation change matters because the application expects credential strings.
 
 Sources: https://www.mongodb.com/docs/manual/reference/operator/query/ne/
 https://www.infoq.com/articles/nosql-injections-analysis/
@@ -32,7 +32,7 @@ https://www.mongodb.com/docs/manual/reference/built-in-roles/
 
 Target time: 0:45
 
-The assigned paper analyses several routes to unintended database behaviour and argues for mitigations across the software lifecycle. We use its operator-based authentication example as our deep dive. Its wider discussion includes query-logic manipulation, JavaScript execution, command-boundary issues and browser-origin attacks. CSRF concerns a different trust boundary, so we keep it distinct. Our extension compares controls that developers might otherwise treat as interchangeable. We ask whether each one prevents this specific operator injection. The underlying attack is prior work. Our contribution is its reproduction, measured comparisons and a current assessment.
+Ron and colleagues analyse several injection mechanisms and mitigation layers. Our deep dive adapts their operator-based authentication example to JSON and the native MongoDB driver. We also locate it beside JavaScript execution, command-boundary failures and browser-origin attacks. CSRF crosses a separate boundary. The paper establishes the mechanism. Our extension asks a testable question: which controls stop this exact bypass? We compare them with positive and negative controls. We claim a reproduction and controlled extension, with results scoped to the recorded stack.
 
 Sources: https://www.infoq.com/articles/nosql-injections-analysis/
 https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-injections
@@ -59,7 +59,7 @@ https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 
 Target time: 0:35
 
-We compared five configurations using fifteen request cases, repeated twice. That gives one hundred and fifty configuration-case observations. We recorded the login status, the selected account, session creation, protected-page access and actual database find commands. The cases include valid credentials, wrong passwords, operator objects, literal text and malformed credential types. We also separately verified that the scripting-disabled server rejects a harmless where expression and the read-only account cannot insert a record. These controls check that the configurations actually enforce what their labels claim. Repetition supports reproducibility within this stack, rather than a statistical estimate of real-world prevalence.
+We ran fifteen request cases across five configurations, twice: one hundred and fifty observations. Each records the login decision, protected access and actual database find commands. The fixtures include legitimate credentials, wrong strings and unexpected input shapes. Separate probes check the database roles and require MongoDB's specific scripting-disabled error. Repetition supports local reproducibility. It does not estimate deployed prevalence.
 
 Sources: Local experiment: nosql-lab/evidence/results.json, results.csv and source code.
 
@@ -88,11 +88,11 @@ The smallest causal fix rejects objects where the login contract requires string
 Sources: https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
 https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 
-## Slide 11: Historical examples and current scope
+## Slide 11: Historical mechanisms and present-day evidence
 
 Target time: 0:30
 
-The assigned article dates to 2016. We reproduced this operator mechanism on the locally installed MongoDB 7.0.0, with Express 5.1.0 and driver 6.20.0. We did not run a MongoDB 8 experiment. Current version-specific documentation says server-side JavaScript functions became deprecated starting in 8.0. That fact concerns a different mechanism, and deprecation does not establish removal. Our tested result is an application-level query-construction failure. It does not establish a MongoDB server flaw or a claim about every NoSQL product.
+The paper gives us a mechanism to investigate. We reproduced operator injection on MongoDB 7.0.0; our controls make that a bounded empirical claim. Version-specific documentation separately says MongoDB 8.0 deprecates server-side JavaScript functions. Deprecation does not establish removal. Neither that documentation nor our local run establishes current attack prevalence. We retain the paper's query-boundary insight while checking each implementation-dependent claim.
 
 Sources: https://www.mongodb.com/docs/v8.0/core/server-side-javascript/
 https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-injections

@@ -4,11 +4,19 @@
   "private": true,
   "type": "module",
   "description": "A local, synthetic teaching lab comparing query-operator injection defences",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node scripts/run-local.mjs",
     "test": "node scripts/experiment.mjs",
-    "reset": "node scripts/reset.mjs"
+    "reset": "node scripts/reset.mjs",
+    "test:unit": "node --test test/*.test.mjs",
+    "test:regression": "node scripts/regressions.mjs",
+    "test:all": "npm run test:unit && npm test && npm run test:regression"
   },
-  "dependencies": { "express": "5.1.0", "mongodb": "6.20.0" }
+  "dependencies": {
+    "express": "5.1.0",
+    "mongodb": "6.20.0"
+  }
 }

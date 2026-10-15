@@ -4,6 +4,7 @@ document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListen
 fetch('/api/health').then(r=>r.json()).then(info=>{byId('environment').textContent=`MongoDB ${info.database} / Node ${info.node} / JSON POST`}).catch(()=>{byId('environment').textContent='Local service unavailable';});
 byId('submit').addEventListener('click',async()=>{
   const button=byId('submit');button.disabled=true;byId('status').textContent='Sending request...';
+  byId('status').className='';byId('filter').textContent='Awaiting response';byId('query').textContent='Database query: awaiting response';byId('decision').textContent='Awaiting response';byId('protected').textContent='Protected access: awaiting check';byId('protected').className='';
   try {
     let request;
     try{request=JSON.parse(byId('request').value)}catch{throw new Error('Enter valid JSON before submitting');}
@@ -18,7 +19,7 @@ byId('submit').addEventListener('click',async()=>{
     const protectedBody=await protectedResponse.json();
     byId('protected').textContent=protectedResponse.ok?protectedBody.note:'Protected notes: access denied';
     byId('protected').className=protectedResponse.ok?'success':'failure';
-  }catch(error){byId('status').textContent=error.message;byId('status').className='failure';}
+  }catch(error){byId('status').textContent=error.message;byId('status').className='failure';byId('filter').textContent='No completed request evidence';byId('query').textContent='Database query: unverified';byId('decision').textContent='No completed response';byId('protected').textContent='Protected access: unverified';}
   finally{button.disabled=false;}
 });
-byId('logout').addEventListener('click',async()=>{await fetch('/api/logout',{method:'POST'});byId('status').textContent='Session cleared';byId('status').className='';byId('protected').textContent='Protected notes: access denied';byId('protected').className='failure';});
+byId('logout').addEventListener('click',async()=>{await fetch('/api/logout',{method:'POST'});byId('status').textContent='Session cleared';byId('status').className='';byId('filter').textContent='No request since session clear';byId('query').textContent='Database query: none since clear';byId('decision').textContent='No active session';byId('protected').textContent='Protected notes: access denied';byId('protected').className='failure';});

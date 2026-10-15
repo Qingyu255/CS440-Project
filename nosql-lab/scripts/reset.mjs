@@ -6,4 +6,4 @@ for(const port of [54171,54172]) {
   const client = new MongoClient(`mongodb://labadmin:${secrets.admin}@127.0.0.1:${port}/admin`);
   await client.connect();await seedDatabase(client);await client.close();
 }
-console.log('Reset only cs440_lab.users in the two dedicated local lab instances.');
+console.log('Reset only cs440_lab.users and cs440_lab.accounts_hashed in the two dedicated local lab instances.');
