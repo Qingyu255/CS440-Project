@@ -1,13 +1,13 @@
 # CS440 NoSQL Injections: complete project pack
 
-Start with `deliverables/CS440-NoSQL-Injections-Reviewed.pptx`. It contains 13 main slides and 11 appendices. Main-slide speaker notes and the separate script target 11:20, including a 90-second demo. This duration is a rehearsal target.
+Start with `deliverables/CS440-NoSQL-Injections-Scope-Expanded.pptx`. It contains 13 main slides and 11 appendices. Main-slide speaker notes and the separate script target 11:30, including a 90-second demo. This duration is a rehearsal target.
 
 ## Files
 
-- `deliverables/CS440-NoSQL-Injections-Reviewed.pptx`: editable deck, native diagrams and tables, embedded speaker notes and source URLs.
-- `deliverables/CS440-NoSQL-Injections-Reviewed.pdf`: portable 24-page copy; speaker notes stay in the PPTX and script.
+- `deliverables/CS440-NoSQL-Injections-Scope-Expanded.pptx`: editable deck, native diagrams and tables, embedded speaker notes and source URLs.
+- `deliverables/CS440-NoSQL-Injections-Scope-Expanded.pdf`: portable 24-page copy; speaker notes stay in the PPTX and script.
 - `deliverables/Speaker-Script.md`: complete timed main-talk script.
-- `deliverables/Q-and-A-Defence-Pack.md`: 25 questions, short answers, technical follow-ups and evidence references.
+- `deliverables/Q-and-A-Defence-Pack.md`: 28 questions, short answers, technical follow-ups and evidence references.
 - `deliverables/Demo-and-Rehearsal-Guide.md`: demo operation, fallbacks, handovers and rehearsal gates.
 - `deliverables/Demo-Backup-90s.mp4`: silent 90-second sequence of four actual captured browser states, for live narration. Use appendix 20-21 for larger evidence views.
 - `deliverables/Rubric-and-Verification.md`: highest-band coverage and verification record.

@@ -177,6 +177,31 @@ Run one practice round in which each person answers a question outside their ass
 If a question goes beyond the experiment, give the established result and explain the additional test needed. Avoid inventing a confident answer to preserve the appearance of expertise.
 
 
+## 26. Is one injection mechanism enough for the topic?
+
+**Short answer:** Our presentation maps the wider attack landscape, studies one mechanism experimentally, and adds a technical contrast with JavaScript injection. The rubric sets no attack-count minimum.
+
+**Technical follow-up:** Operator injection receives the detailed input-to-query explanation, live authentication consequence, control comparison and functional checks. The fifteen fixtures cover variations and controls within that study. The other mechanisms are literature coverage, with JavaScript injection as an explicit conceptual comparison. We do not count them as additional completed experiments.
+
+## 27. Does requiring strings prevent JavaScript injection?
+
+**Short answer:** A type check can accept a string that an application later incorporates into executable source. The defence must match how the input is interpreted.
+
+**Technical follow-up:** This comparison concerns code executed by MongoDB's scripting engine. The application backend language is a separate choice. This illustrative unsafe construction concatenates client input into a JavaScript expression:
+
+```js
+const expression = "this.username === '" + input + "'";
+users.find({ $where: expression });
+```
+
+This is a conceptual example, not code used by the lab's login endpoint or a measured exploit. Quotes and expression syntax in `input` can alter the resulting program. Prefer an application-owned ordinary query for this lookup, and disable server-side scripting when unused. If a system needs scripting, keep untrusted values out of executable source construction. [MongoDB 7.0 `$where`](https://www.mongodb.com/docs/v7.0/reference/operator/query/where/), [authors' discussion](https://www.infoq.com/articles/nosql-injections-analysis/).
+
+## 28. Does your `$where` probe demonstrate JavaScript injection?
+
+**Short answer:** It demonstrates whether the scripting configuration is active. It uses a fixed harmless expression with no attacker-controlled source construction.
+
+**Technical follow-up:** The enabled instance must find Alice; the disabled instance must return MongoDB's specific disabled-scripting error. This validates a control used in our operator-injection comparison. A second injection experiment would need a separate vulnerable construction, an attacker-controlled input, observed unintended behaviour and its own defence checks. We have not claimed that experiment.
+
 ## Experiment-integrity challenges
 
 **Could an old cookie make a rejected request appear successful?** The supplementary regressions first authenticate, then send a failed login using that existing cookie and replay the old token against the protected endpoint. They require access to fail. The two validated modes also run this sequence with the operator object. The ordinary matrix's protected checks alone would not establish old-token revocation.

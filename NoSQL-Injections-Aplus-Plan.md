@@ -1,6 +1,6 @@
 # CS440 NoSQL Injections: a research and presentation plan for the A/A+ band
 
-Execution update, 15 October 2026: the implemented deck, lab and measured results are now in this repository. See README.md and research/Claim-Ledger.md. The original proposal below remains as the design record.
+Execution update, 15 October 2026: the implemented deck, lab and measured results are now in this repository. See README.md and research/Claim-Ledger.md. The original proposal below remains as the design record; section 7 and the rehearsal target reflect the expanded final deck.
 
 Prepared 7 October 2026. This is a proposed investigation and deck blueprint. No demo or experiment has been run as part of preparing this plan. All experimental outcomes below are hypotheses or acceptance criteria until your group records them.
 
@@ -235,27 +235,27 @@ Record a short backup video using the same fixtures and build. Put annotated scr
 
 ## 7. Timed main-deck blueprint
 
-Aim for **13 main slides, 11 minutes 20 seconds**, including the demo and handovers. This leaves 40 seconds before the hard cutoff. References and technical appendices follow the conclusion and are available during Q&A.
+Aim for **13 main slides, 11 minutes 30 seconds**, including the demo and handovers. This leaves 30 seconds before the hard cutoff. References and technical appendices follow the conclusion and are available during Q&A.
 
-Titles below are proposed claims. Change result-dependent titles if the experiments do not support them.
+The timing and subjects below follow the implemented deck. Historical version-specific material remains in the appendices; slide 11 provides the conceptual injection comparison.
 
-| Slide | Proposed title | Evidence or visual | Time | What it earns |
+| Slide | Subject | Evidence or visual | Time | What it supports |
 |---:|---|---|---:|---|
 | 1 | NoSQL Injections: When Client Input Changes a Database Query | Topic, research question and a small string-versus-object preview | 0:25 | A focused opening |
 | 2 | Document queries support conditions as well as literal values | One account document, equality filter and operator filter, plus a small NoSQL family map | 0:50 | Essential background without a database survey |
 | 3 | The application turns an HTTP request into a security decision | Client, parser, application, driver and database diagram with the trust boundary marked | 0:50 | Architecture, threat model and CS440 connection |
-| 4 | The 2016 paper maps several routes to unintended database behaviour | Compact attack map, chosen deep dive, original citation and investigation questions | 0:45 | Literature understanding and explicit scope |
-| 5 | An operator object changes the password predicate | Request, vulnerable code, resulting filter and match condition, revealed in sequence | 1:10 | Technical depth and causality |
-| 6 | Valid JSON can still violate the login contract | Known-user example, literal-text control, attack assumptions and toy-lab caveat | 1:10 | Conceptual precision and limits |
+| 4 | The 2016 paper maps several routes to unintended database behaviour | Five-row attack map, chosen deep dive, original citation and investigation question | 0:50 | Literature understanding and explicit scope |
+| 5 | An operator object changes the password predicate | Request, vulnerable code, resulting filter and match condition, revealed in sequence | 1:00 | Technical depth and causality |
+| 6 | Valid JSON can still violate the login contract | Known-user example, literal-text control, attack assumptions and toy-lab caveat | 1:00 | Conceptual precision and limits |
 | 7 | We compare controls while holding the request and records constant | Configurations, controls, measured outcomes and version summary | 0:35 | An inspectable research method |
 | 8 | The same request tests the vulnerable and hardened paths | Four-step live demo with an evidence frame behind it | 1:30 | Excellent demonstration |
 | 9 | Our results show where this injection stops | Observed control matrix, query/session evidence and valid-login result | 1:05 | Original analysis grounded in evidence |
 | 10 | The fix enforces input types before database interpretation | Small validation diff and account-lookup/password-verification flow | 0:55 | Defence knowledge and practical lessons |
-| 11 | Historical examples need current version checks | 2016 context, MongoDB 8.0 deprecation fact and an explicit scope limit | 0:30 | Critical reading of an older paper |
+| 11 | Operator injection and JavaScript injection | Input forms, interpreters, relevant controls and an explicit conceptual-only disclosure | 0:55 | Context-specific defence reasoning |
 | 12 | Our findings explain the failed authentication boundary | Two or three findings, each tied to an experiment or source | 0:45 | Strong synthesis rather than topic recap |
 | 13 | Flexible search APIs still need enforceable query policies | One specific open problem, lab limitations and a final engineering recommendation | 0:50 | A grounded conclusion and research judgment |
 
-Total: **680 seconds**. Background and framing use 2:50, approach uses 6:55, and conclusions use 1:35. If rehearsal exceeds the budget, shorten exposition and historical breadth before removing controls or the conclusion.
+Total: **690 seconds**. Background and framing use 2:55, approach uses 7:00, and conclusions use 1:35. If rehearsal exceeds the budget, shorten exposition and historical breadth before removing controls or the conclusion.
 
 ### Slide 5: the centre of the technical argument
 
@@ -384,7 +384,7 @@ Use the actual presentation date as T. Aim to complete these gates roughly in th
 | T-9 days | Implement isolated controls and the final authentication path | Record outcomes, query occurrence and functional controls without confounding the isolated comparisons |
 | T-7 days | Complete the claim-led deck and appendices | Each main claim has evidence, assumptions and a defensible source |
 | T-5 days | Record backup media and reproduce on a second machine | Demo reset and backup recovery work reliably |
-| T-3 days | Rehearse complete delivery and challenging Q&A | Finish at or below 11:20 with handovers and demo included |
+| T-3 days | Rehearse complete delivery and challenging Q&A | Finish at or below 11:30 with handovers and demo included |
 | T-2 days | Review clarity from an audience perspective, inspect exports, freeze dependencies | Main deck remains understandable without a live demo |
 | Before submission deadline | Final file check and individual uploads | Every member confirms the required submission and presentation availability |
 

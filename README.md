@@ -4,12 +4,12 @@
 
 A controlled investigation of NoSQL query-operator injection for the CS440 group project. Based on Ron, Shulman-Peleg and Puzanov, *Analysis and Mitigation of NoSQL Injections*, IEEE Security & Privacy 14(2), 30-39 (2016), DOI [10.1109/MSP.2016.36](https://doi.org/10.1109/MSP.2016.36).
 
-The local synthetic lab follows an injected JSON request through query construction, false authentication and protected-data access, then compares five configurations. The final presentation contains 13 main slides and 11 appendices, targeting 11:20 including a 90-second demo.
+The local synthetic lab follows an injected JSON request through query construction, false authentication and protected-data access, then compares five configurations. The final presentation maps the wider attack landscape, investigates operator injection experimentally, and contrasts it with JavaScript injection. It contains 13 main slides and 11 appendices, targeting 11:30 including a single 90-second demo.
 
 ## Presentation and preparation
 
-- [Editable deck](deliverables/CS440-NoSQL-Injections-Reviewed.pptx)
-- [Portable PDF](deliverables/CS440-NoSQL-Injections-Reviewed.pdf)
+- [Editable deck](deliverables/CS440-NoSQL-Injections-Scope-Expanded.pptx)
+- [Portable PDF](deliverables/CS440-NoSQL-Injections-Scope-Expanded.pdf)
 - [Speaker script](deliverables/Speaker-Script.md)
 - [Q&A defence pack](deliverables/Q-and-A-Defence-Pack.md)
 - [Demo and rehearsal guide](deliverables/Demo-and-Rehearsal-Guide.md)

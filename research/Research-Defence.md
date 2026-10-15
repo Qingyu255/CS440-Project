@@ -25,3 +25,8 @@ Consider a search endpoint with a mandatory tenant condition. Compare two implem
 ## Conviction that survives questioning
 
 Say exactly which observation supports your position. If challenged about a control, point to its independent probe. If asked about another stack, explain the unknown rather than inventing a guarantee. If an observation contradicts your hypothesis, retain it and change the conclusion. Technical precision and a willingness to be falsified communicate research commitment more credibly than dramatic claims.
+
+
+## Why one deep experiment supports the broader topic
+
+The main talk first maps the paper's wider attack boundaries. It then follows one deterministic operator injection through a security consequence and controlled defence comparisons. A separate 55-second conceptual contrast explains why an input accepted as a string can still become JavaScript source when an application constructs executable code. This supports a bounded conclusion about context-specific defences. The harmless fixed `$where` configuration probe is not counted as a second injection demonstration. The fifteen request fixtures are variations and controls within one operator-injection study.

@@ -1,6 +1,6 @@
 # Demo and rehearsal guide
 
-The main talk has 13 slides with a target duration of 11:20. Appendices 14-24 support Q&A. The 90-second demo forms part of that target. Delivery duration still needs a real group rehearsal.
+The main talk has 13 slides with a target duration of 11:30. Appendices 14-24 support Q&A. The 90-second demo forms part of that target. Delivery duration still needs a real group rehearsal.
 
 ## Before presenting
 
@@ -29,14 +29,18 @@ If a process or display fails, switch to the local backup within about ten secon
 
 The video is a sequence of four captured browser states, not a continuous screen recording. Each stage shows the configuration/request view, followed by an enlarged predicate/decision view. Optional subtitles identify the stages. The stages last 15, 25, 25 and 25 seconds. The last stage includes the closing sentence. Narrate the evidence. If playback fails too, use the four JPEGs or appendix slides 20 and 21. The main result table preserves all four outcomes.
 
+## Scope of the contrast
+
+Slide 4 maps the paper's wider attack landscape. Slide 11 adds a 55-second conceptual contrast between operator injection and unsafe construction of server-side JavaScript. The demo stays at 90 seconds. The fixed `$where` probe verifies scripting configuration and is not presented as a second injection exploit. Shorter explanations on slides 5 and 6 leave a target total of 11:30 and a 30-second buffer to the hard stop.
+
 ## Timing and handovers
 
 | Slides | Budget | Handover sentence |
 |---|---:|---|
 | 1-3 | 2:05 | “That boundary gives us the question we tested.” |
-| 4-6 | 3:05 | “We turned this mechanism into a controlled comparison.” |
+| 4-6 | 2:50 | “We turned this mechanism into a controlled comparison.” |
 | 7-8 | 2:05 | “The live result is one case in our wider control matrix.” |
-| 9-11 | 2:30 | “Those differences determine what we can conclude.” |
+| 9-11 | 2:55 | “Those differences determine what we can conclude.” |
 | 12-13 | 1:35 | Finish with the recommendation and invite questions |
 
 The five-member blocks follow these rows. For four members, use 1-4, 5-7, 8-10 and 11-13. Assign names yourselves, then rehearse all transitions as part of the timer.
@@ -44,7 +48,7 @@ The five-member blocks follow these rows. For four members, use 1-4, 5-7, 8-10 a
 ## Rehearsal gates
 
 - First run: accuracy. Each person explains the mechanism in their own words and answers a question outside their block.
-- Second run: full timing, including browser switching, waits and handovers. Aim for 11:20 or less.
+- Second run: full timing, including browser switching, waits and handovers. Aim for 11:30 or less.
 - Third run: deliberate demo failure. Practise switching to the captured run without losing the argument.
 - Final run: present from the final exported deck on the actual presentation machine.
 

@@ -1,6 +1,6 @@
 # Presentation source
 
-The delivered PPTX keeps its text, architecture diagram and seven tables editable in PowerPoint. Main-talk notes are also available in `../deliverables/Speaker-Script.md`. `slide-source.json` contains the complete authored text and notes for all 24 slides.
+The delivered PPTX keeps its text, architecture diagram and eight tables editable in PowerPoint. Main-talk notes are also available in `../deliverables/Speaker-Script.md`. `slide-source.json` contains slide titles and complete speaker notes for all 24 slides. The full canvas content is defined in `build-deck.mjs`.
 
 `build-deck.mjs` is the JavaScript source used for the deck. Its result table reads the measured experiment JSON and refuses inconsistent repetitions. The code preserves the 1280 x 720 canvas and the deck's typography and colours.
 

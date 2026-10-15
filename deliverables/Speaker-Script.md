@@ -1,6 +1,6 @@
 # CS440 NoSQL Injections: speaker script
 
-13 main slides. Target 11:20, including the 90-second demo. Times are rehearsal targets, not measured delivery durations.
+13 main slides. Target 11:30, including the 90-second demo. Times are rehearsal targets, not measured delivery durations.
 
 ## Slide 1: NoSQL Injections
 
@@ -28,18 +28,18 @@ The attacker can submit JSON to the login endpoint and knows Alice's username. T
 Sources: https://www.infoq.com/articles/nosql-injections-analysis/
 https://www.mongodb.com/docs/manual/reference/built-in-roles/
 
-## Slide 4: The assigned paper and our investigation
+## Slide 4: Attack landscape and study scope
 
-Target time: 0:45
+Target time: 0:50
 
-Ron and colleagues analyse several injection mechanisms and mitigation layers. Our deep dive adapts their operator-based authentication example to JSON and the native MongoDB driver. We also locate it beside JavaScript execution, command-boundary failures and browser-origin attacks. CSRF crosses a separate boundary. The paper establishes the mechanism. Our extension asks a testable question: which controls stop this exact bypass? We compare them with positive and negative controls. We claim a reproduction and controlled extension, with results scoped to the recorded stack.
+The paper surveys several boundaries. Objects can become query predicates. Constructed query text can acquire extra logic, which the authors discuss using SQL-inspired union terminology. These labels can overlap. Client strings can also enter JavaScript source or a protocol command. The browser-origin example concerns CSRF, a separate trust issue. We investigate operator injection experimentally and compare it conceptually with JavaScript injection. That choice gives us depth while locating the result within the wider topic. Our research question is which controls stop the operator-based login bypass. The five rows describe the literature landscape, not five attacks we have demonstrated.
 
 Sources: https://www.infoq.com/articles/nosql-injections-analysis/
 https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-injections
 
 ## Slide 5: An object changes the password condition
 
-Target time: 1:10
+Target time: 1:00
 
 This is the exact injected request. Alice's username remains a literal string. The password field becomes an object containing the not-equal operator. The vulnerable code passes both values directly into findOne. That produces a filter requiring username equal to Alice and password different from the empty string. Alice's synthetic stored password is non-empty, so her record matches. The application then creates a session without proof that the client knows her password. The object needs no JavaScript execution, and no quote-breaking payload. The database executes a supported predicate. The failure comes from the application's accepted input and its interpretation of the match.
 
@@ -48,7 +48,7 @@ https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
 
 ## Slide 6: Input shape and attack assumptions
 
-Target time: 1:10
+Target time: 1:00
 
 The key distinction is an operator object versus operator-looking text. The object changes the query predicate. A string containing those same characters stays a literal value in this filter and fails to match. Our negative control confirms that difference. This example also depends on the application accepting objects and granting a session when a record matches. We use a known unique username, so we can say exactly which account the request selects. The toy reproduction stores synthetic plaintext passwords to expose this mechanism. The final path uses a separate hash-only account collection and verifies the password independently. A broad findOne query does not guarantee an administrator account.
 
@@ -88,22 +88,25 @@ The smallest causal fix rejects objects where the login contract requires string
 Sources: https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
 https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 
-## Slide 11: Historical mechanisms and present-day evidence
+## Slide 11: Operator injection and JavaScript injection
 
-Target time: 0:30
+Target time: 0:55
 
-The paper gives us a mechanism to investigate. We reproduced operator injection on MongoDB 7.0.0; our controls make that a bounded empirical claim. Version-specific documentation separately says MongoDB 8.0 deprecates server-side JavaScript functions. Deprecation does not establish removal. Neither that documentation nor our local run establishes current attack prevalence. We retain the paper's query-boundary insight while checking each implementation-dependent claim.
+The distinction is what interprets the input. Our measured attack supplies an object that MongoDB interprets as a query predicate. In a different application design, a string may be concatenated into a JavaScript expression and passed to a server-side facility such as $where. Requiring a string would still accept that input type. The relevant control is to avoid constructing executable source from client input and disable unused scripting. We use this as a literature-based contrast. Our harmless fixed $where probe only checks the configuration. It is not a second injection experiment. This explains why defences must match the interpretation boundary.
 
-Sources: https://www.mongodb.com/docs/v8.0/core/server-side-javascript/
-https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-injections
+Sources: https://www.infoq.com/articles/nosql-injections-analysis/
+https://www.mongodb.com/docs/v7.0/reference/operator/query/where/
+https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
 
 ## Slide 12: Findings and engineering lessons
 
 Target time: 0:45
 
-Our reproduction shows the exact point where a credential value becomes a database predicate and then a false session. The isolated comparison shows that string validation blocks that mechanism before a query. The scripting and privilege controls remain useful, but their boundaries differ from the input contract. Finally, the functional controls show that the fixed path retains correct authentication. The engineering lesson is to define and enforce each endpoint's accepted query structure, then verify the actual security decision. Testing only whether a malicious-looking string gets rejected would have missed the important difference between a literal value and an operator object.
+Our measured result concerns operator objects: validation rejects them before a find command while legitimate login still works. The wider comparison explains the limit of that result. A string can satisfy a type check and still become executable source in another design. Each control needs a specified boundary and evidence that it enforces that boundary. Our experiment supports the credential-contract claim. The literature supports the JavaScript contrast. The engineering lesson is to retain application control over query or code structure, then test the resulting security decision and legitimate functionality.
 
-Sources: Local experiment: nosql-lab/evidence/results.json, results.csv and source code.
+Sources: https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
+https://www.infoq.com/articles/nosql-injections-analysis/
+https://www.mongodb.com/docs/v7.0/reference/operator/query/where/
 
 ## Slide 13: Flexible filters need enforceable access policies
 
