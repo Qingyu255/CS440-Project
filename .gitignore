@@ -1,0 +1,15 @@
+# Generated local state, credentials and installed dependencies
+**/.state/
+**/node_modules/
+**/.npm-cache/
+**/.env
+**/.env.*
+!.env.example
+.DS_Store
+**/.DS_Store
+*.log
+
+# Private rendering/build intermediates and redundant bundles
+.build/
+.codex-finalizer/
+*.zip

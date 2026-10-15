@@ -1,0 +1,3013 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-08T14:35:29.999Z",
+  "environment": {
+    "ready": true,
+    "database": "7.0.0",
+    "node": "v23.6.1",
+    "modes": {
+      "baseline": "Vulnerable baseline",
+      "noscripting": "JavaScript disabled",
+      "readonly": "Read-only DB account",
+      "validated": "String validation only",
+      "hardened": "Validated + hash verification"
+    },
+    "express": "5.1.0",
+    "mongodbDriver": "6.20.0",
+    "passwordHash": "scrypt N=131072 r=8 p=1, 16-byte random salt, 64-byte output"
+  },
+  "method": {
+    "cases": 15,
+    "configurations": 5,
+    "repetitions": 2,
+    "totalHttpCases": 150,
+    "additionalHttpChecks": 10,
+    "scope": "One local Node/Express/native-driver stack; synthetic plaintext reproduction and separate hash-verifying path"
+  },
+  "controls": {
+    "main": {
+      "authenticatedUsers": [
+        {
+          "user": "labapp",
+          "db": "cs440_lab"
+        }
+      ],
+      "authenticatedRoles": [
+        {
+          "role": "readWrite",
+          "db": "cs440_lab"
+        }
+      ],
+      "whereAllowed": true
+    },
+    "noscripting": {
+      "authenticatedUsers": [
+        {
+          "user": "labapp",
+          "db": "cs440_lab"
+        }
+      ],
+      "authenticatedRoles": [
+        {
+          "role": "readWrite",
+          "db": "cs440_lab"
+        }
+      ],
+      "whereAllowed": false,
+      "whereError": "Location6108304",
+      "whereErrorCode": 6108304
+    },
+    "readonly": {
+      "authenticatedUsers": [
+        {
+          "user": "labreader",
+          "db": "cs440_lab"
+        }
+      ],
+      "authenticatedRoles": [
+        {
+          "role": "read",
+          "db": "cs440_lab"
+        }
+      ],
+      "writeDenied": true,
+      "writeError": "Unauthorized"
+    }
+  },
+  "results": [
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "baseline",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "noscripting",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "readonly",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": []
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "validated",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": []
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 1,
+      "configuration": "hardened",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "baseline",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "noscripting",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": null
+      },
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": []
+      },
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": 440
+      },
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {},
+      "request": []
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      },
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "readonly",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": []
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "validated",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C01",
+      "case": "Valid credentials",
+      "status": 200,
+      "authenticated": true,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": "alice",
+      "protectedStatus": 200,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C02",
+      "case": "Wrong string password",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C03",
+      "case": "Unknown username",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "nobody"
+      },
+      "request": {
+        "username": "nobody",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C04",
+      "case": "Password operator object",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C05",
+      "case": "Username operator with wrong password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C06",
+      "case": "Operator-looking literal string",
+      "status": 401,
+      "authenticated": false,
+      "databaseQueried": true,
+      "findCommands": 1,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": {
+        "username": "alice"
+      },
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C07",
+      "case": "Null password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": null
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C08",
+      "case": "Array password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": []
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C09",
+      "case": "Missing password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C10",
+      "case": "Numeric password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": 440
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C11",
+      "case": "Extra field with valid credentials",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]",
+        "role": "administrator"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C12",
+      "case": "Top-level array",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": []
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C13",
+      "case": "Both fields contain operators",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": {
+          "$ne": ""
+        },
+        "password": {
+          "$ne": ""
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C14",
+      "case": "Empty password",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "alice",
+        "password": "[REDACTED STRING]"
+      }
+    },
+    {
+      "repetition": 2,
+      "configuration": "hardened",
+      "caseId": "C15",
+      "case": "Empty username",
+      "status": 400,
+      "authenticated": false,
+      "databaseQueried": false,
+      "findCommands": 0,
+      "account": null,
+      "protectedStatus": 401,
+      "filter": null,
+      "request": {
+        "username": "",
+        "password": "[REDACTED STRING]"
+      }
+    }
+  ]
+}

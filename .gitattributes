@@ -1,0 +1,11 @@
+* text=auto
+*.mjs text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.ndjson text eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.pptx binary
+*.mp4 binary

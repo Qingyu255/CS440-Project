@@ -1,0 +1,14 @@
+{
+  "name": "cs440-nosql-injection-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A local, synthetic teaching lab comparing query-operator injection defences",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node scripts/run-local.mjs",
+    "test": "node scripts/experiment.mjs",
+    "reset": "node scripts/reset.mjs"
+  },
+  "dependencies": { "express": "5.1.0", "mongodb": "6.20.0" }
+}
