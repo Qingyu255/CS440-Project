@@ -13,3 +13,5 @@
 .build/
 .codex-finalizer/
 *.zip
+**/~$*
+**/__pycache__/

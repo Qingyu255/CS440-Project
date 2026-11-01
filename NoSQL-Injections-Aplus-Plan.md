@@ -1,6 +1,6 @@
 # CS440 NoSQL Injections: a research and presentation plan for the A/A+ band
 
-Execution update, 15 October 2026: the implemented deck, lab and measured results are now in this repository. See README.md and research/Claim-Ledger.md. The original proposal below remains as the design record; section 7 and the rehearsal target reflect the expanded final deck.
+Execution update, 1 November 2026: the visual revision, lab and measured results are in this repository. See README.md, research/Claim-Ledger.md and deliverables/CS440-Team-Handover.docx. The proposal below is a historical design record. Its titles and timing are superseded by the final deck: 10:25 planned content, with a 10:50–11:00 target for the full rehearsal including handovers.
 
 Prepared 7 October 2026. This is a proposed investigation and deck blueprint. No demo or experiment has been run as part of preparing this plan. All experimental outcomes below are hypotheses or acceptance criteria until your group records them.
 

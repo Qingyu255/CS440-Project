@@ -1,6 +1,6 @@
 # Demo and rehearsal guide
 
-The main talk has 13 slides with a target duration of 11:30. Appendices 14-24 support Q&A. The 90-second demo forms part of that target. Delivery duration still needs a real group rehearsal.
+The main talk has 13 slides and 10:25 of planned content, including the 90-second demo. Allow about 25 seconds for handovers and navigation, and target a measured full run of 10:50–11:00. Appendices 14–24 support Q&A. Delivery still needs a real group rehearsal.
 
 ## Before presenting
 
@@ -27,28 +27,27 @@ Pause for the displayed HTTP outcome. The final hash-verification step may take 
 
 If a process or display fails, switch to the local backup within about ten seconds. Say: “We will use our captured run. The request, predicate and outcome are the same recorded experiment.”
 
-The video is a sequence of four captured browser states, not a continuous screen recording. Each stage shows the configuration/request view, followed by an enlarged predicate/decision view. Optional subtitles identify the stages. The stages last 15, 25, 25 and 25 seconds. The last stage includes the closing sentence. Narrate the evidence. If playback fails too, use the four JPEGs or appendix slides 20 and 21. The main result table preserves all four outcomes.
+The video is a sequence of four actual browser states captured on 1 November 2026, not a continuous screen recording. Each stage shows the full configuration/request view, then an enlarged response. Optional subtitles identify the stages. The stages last 15, 25, 25 and 25 seconds. If playback fails too, use the fresh PNG captures or appendix slides 20 and 21. Slide 8 also contains enlarged actual decision crops.
 
 ## Scope of the contrast
 
-Slide 4 maps the paper's wider attack landscape. Slide 11 adds a 55-second conceptual contrast between operator injection and unsafe construction of server-side JavaScript. The demo stays at 90 seconds. The fixed `$where` probe verifies scripting configuration and is not presented as a second injection exploit. Shorter explanations on slides 5 and 6 leave a target total of 11:30 and a 30-second buffer to the hard stop.
+Slide 4 maps the paper's five attack classes. Slide 11 provides a 40-second conceptual comparison of operator injection and unsafe JavaScript construction. The demo stays at 90 seconds. The fixed `$where` probe checks configuration and is not a second injection exploit. Standard click builds on slides 5 and 10 reveal the mechanism and fix in stages. The PDF contains all final states. Check the builds on the actual presentation machine.
 
 ## Timing and handovers
 
-| Slides | Budget | Handover sentence |
+| Slides and speaker | Content budget | Handover sentence |
 |---|---:|---|
-| 1-3 | 2:05 | “That boundary gives us the question we tested.” |
-| 4-6 | 2:50 | “We turned this mechanism into a controlled comparison.” |
-| 7-8 | 2:05 | “The live result is one case in our wider control matrix.” |
-| 9-11 | 2:55 | “Those differences determine what we can conclude.” |
-| 12-13 | 1:35 | Finish with the recommendation and invite questions |
+| 1–3 / Ercong Kee | 2:00 | “The assigned paper shows several ways input can cross a boundary like this.” |
+| 4–6 / Pheobe Neo | 2:25 | “We kept those assumptions fixed while comparing five configurations.” |
+| 7–9 / Kendrick Poon | 3:15 | “The minimal fix explains the result. A complete login also needs proper password verification.” |
+| 10–13 / Liu Qingyu | 2:45 | Finish the recommendation and proposed search experiment, then invite questions |
 
-The five-member blocks follow these rows. For four members, use 1-4, 5-7, 8-10 and 11-13. Assign names yourselves, then rehearse all transitions as part of the timer.
+These suggested blocks follow the supplied name order. The content budgets total 10:25. Rehearse all transitions and navigation as part of the full timer. See CS440-Team-Handover.docx for the core idea, explanation and question for each slide.
 
 ## Rehearsal gates
 
 - First run: accuracy. Each person explains the mechanism in their own words and answers a question outside their block.
-- Second run: full timing, including browser switching, waits and handovers. Aim for 11:30 or less.
+- Second run: full timing, including browser switching, waits and handovers. Aim for 10:50–11:00.
 - Third run: deliberate demo failure. Practise switching to the captured run without losing the argument.
 - Final run: present from the final exported deck on the actual presentation machine.
 
@@ -56,6 +55,6 @@ If the talk exceeds the budget, trim historical detail and repeated explanations
 
 ## Submission and remaining group work
 
-Add your actual group members to the title slide if desired. Every member must understand the complete mechanism, present, attend Q&A and submit the deck as the briefing requires. Confirm the midnight-before-presentation deadline in eLearn.
+The supplied group members appear on the cover. Every member must understand the complete mechanism, present, attend Q&A and submit the deck as the briefing requires. Confirm the midnight-before-presentation deadline in eLearn.
 
 The authored pack and local experiment are complete. CI evidence, when successful, provides an additional runner environment and does not replace your presentation-machine check. Remaining human steps are the second-machine run, group rehearsal, any lecturer-specific adjustments and individual submission. No group delivery or second-machine execution has been claimed as completed.

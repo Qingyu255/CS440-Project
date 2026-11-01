@@ -1,8 +1,8 @@
 # Presentation source
 
-The delivered PPTX keeps its text, architecture diagram and eight tables editable in PowerPoint. Main-talk notes are also available in `../deliverables/Speaker-Script.md`. `slide-source.json` contains slide titles and complete speaker notes for all 24 slides. The full canvas content is defined in `build-deck.mjs`.
+The delivered PPTX keeps text, explanatory diagrams and five tables editable. The two evidence slides use authentic browser PNGs. Main-talk notes are also in `../deliverables/Speaker-Script.md`. `slide-source.json` contains titles, notes, core ideas, owners and timing for all 24 slides.
 
-`build-deck.mjs` is the JavaScript source used for the deck. Its result table reads the measured experiment JSON and refuses inconsistent repetitions. The code preserves the 1280 x 720 canvas and the deck's typography and colours.
+`revised-content.mjs` holds narration, core ideas, transitions and questions. `revised-deck.mjs` defines the editable 1280 × 720 layouts and reads the measured results. `build-deck.mjs` and `finalize-revised.mjs` materialize local image bytes and validate the file. A live-session source snapshot alone is insufficient to package image assets. `add-reveals.py` adds standard click builds on slides 5 and 10 before final validation. Check builds in the actual presentation application.
 
 ## Rebuild with Codex's bundled artifact runtime
 
