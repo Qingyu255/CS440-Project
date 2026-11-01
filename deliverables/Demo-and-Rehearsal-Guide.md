@@ -16,7 +16,7 @@ The main talk has 13 slides and 10:25 of planned content, including the 90-secon
 | Time | Operator action | Spoken point |
 |---|---|---|
 | 0-15 s | Baseline; Wrong password; Send JSON request | A wrong credential fails and protected notes remain inaccessible |
-| 15-40 s | Operator object; Send JSON request | The password becomes a predicate; Alice matches and the app creates a session |
+| 15-40 s | Operator object; Send JSON request | The object changes the password condition; the app logs in as Alice without the correct password |
 | 40-65 s | Select hardened; replay the unchanged object | The server rejects the contract before a find command; protected access fails |
 | 65-85 s | Valid credentials; Send JSON request | Correct credentials still work after the fix |
 | 85-90 s | Return to slide 9 | The results identify the boundary restored by validation |
@@ -31,7 +31,7 @@ The video is a sequence of four actual browser states captured on 1 November 202
 
 ## Scope of the contrast
 
-Slide 4 maps the paper's five attack classes. Slide 11 provides a 40-second conceptual comparison of operator injection and unsafe JavaScript construction. The demo stays at 90 seconds. The fixed `$where` probe checks configuration and is not a second injection exploit. Standard click builds on slides 5 and 10 reveal the mechanism and fix in stages. The PDF contains all final states. Check the builds on the actual presentation machine.
+Slide 4 maps the paper's five attack classes. Slide 11 provides a 40-second conceptual comparison of operator injection and unsafe JavaScript construction. The demo stays at 90 seconds. The fixed `$where` probe checks configuration and is not a second injection exploit. On result slides, say the security outcome first and treat HTTP codes as supporting evidence. Standard click builds on slides 5 and 10 reveal the mechanism and fix in stages. The PDF contains all final states. Check the builds on the actual presentation machine.
 
 ## Timing and handovers
 

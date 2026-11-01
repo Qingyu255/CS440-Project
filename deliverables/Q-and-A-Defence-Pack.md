@@ -44,9 +44,9 @@ The evidence in this pack comes from `nosql-lab/evidence/results.json` and the s
 
 **Boundary:** Plaintext credential storage is not a production recommendation. [OWASP Password Storage guidance](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
 
-## 7. Would correct password-hash verification stop this bypass?
+## 7. Would correct password-hash verification stop this attack?
 
-**Short answer:** Yes, for this illustrated password-filter bypass. The app must verify that the supplied password corresponds to the selected account's hash before creating a session.
+**Short answer:** Yes, for this illustrated password-filter attack. The app must verify that the supplied password corresponds to the selected account's hash before creating a session.
 
 **Technical follow-up:** Our hardened path rejects the object before lookup. Valid strings reach the password verifier. Correct credentials succeed and wrong credentials fail. Hash verification does not establish the safety of unrelated search, authorisation or update queries.
 

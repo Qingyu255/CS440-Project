@@ -66,9 +66,9 @@ export async function buildRevised(p,root){
    stage=3;take(s,'A match becomes a session without password proof.',C.red,568);
    t(s,'For this record, the stored password is non-empty. $ne: "" also matches missing fields.',64,629,1140,35,19,{color:C.muted});stage=0;break;
   case 'types':
-   label(s,'OBJECT',64,174,1152,C.red);t(s,'{ "$ne": "" }',64,230,420,70,35,{mono:true,color:C.red});arr(s,500,251,70,C.red);box(s,'MongoDB operator',604,209,320,103,C.red,C.paleRed);t(s,'MATCH\nAlice returned',970,218,242,96,30,{bold:true,color:C.red});
+   label(s,'OBJECT',64,174,1152,C.red);t(s,'{ "$ne": "" }',64,230,420,70,35,{mono:true,color:C.red});arr(s,500,251,70,C.red);box(s,'MongoDB operator',604,209,320,103,C.red,C.paleRed);t(s,'CONDITION TRUE\nDatabase returns Alice',970,218,246,96,25,{bold:true,color:C.red});
    line(s,64,359,1152);
-   label(s,'STRING',64,399,1152,C.blue);t(s,'"{\\"$ne\\":\\"\\"}"',64,454,460,74,31,{mono:true,color:C.blue});arr(s,500,475,70,C.blue);box(s,'Literal text',604,433,320,103,C.blue,C.paleBlue);t(s,'NO MATCH\nLogin fails',970,442,242,96,30,{bold:true,color:C.blue});
+   label(s,'STRING',64,399,1152,C.blue);t(s,'"{\\"$ne\\":\\"\\"}"',64,454,460,74,31,{mono:true,color:C.blue});arr(s,500,475,70,C.blue);box(s,'Literal text',604,433,320,103,C.blue,C.paleBlue);t(s,'CONDITION FALSE\nLogin rejected',970,442,246,96,25,{bold:true,color:C.blue});
    take(s,'The parsed input type changes what the query means.',C.ink,586);break;
   case 'experiment':
    t(s,'15 cases',64,168,280,68,43,{bold:true});t(s,'Correct / wrong passwords\nOperator objects\nUnexpected types and fields',64,255,300,145,26);
@@ -77,35 +77,35 @@ export async function buildRevised(p,root){
    ['Baseline','JavaScript disabled','Read-only DB account','String validation','Full hardened login'].forEach((v,j)=>{t(s,v,467,215+j*54,344,43,26,{color:j>2?C.green:C.ink});});
    arr(s,827,285,55,C.blue);label(s,'2 RUNS',920,161,290,C.blue);
    t(s,'Login decision\nProtected access\nQuery count',920,239,295,160,28);
-   line(s,64,525,1152);t(s,'150 recorded outcomes',64,555,590,60,37,{bold:true,color:C.blue});t(s,'Control probes verify settings.\nRepeated runs show local repeatability.',695,548,520,90,23,{color:C.muted});break;
+   line(s,64,525,1152);t(s,'150 recorded case results',64,555,590,60,37,{bold:true,color:C.blue});t(s,'Control probes verify settings.\nRepeated runs show local repeatability.',695,548,520,90,23,{color:C.muted});break;
   case 'demo':{
-   const x=[64,359,654,949],titles=['Wrong password','Operator object','Same object + fix','Correct password'];const outcomes=['Rejected','Alice session','Rejected','Alice session'];
-   for(let n=0;n<4;n++){label(s,String(n+1).padStart(2,'0'),x[n],159,250,n===1?C.red:C.blue);t(s,titles[n],x[n],207,260,78,28,{bold:true});t(s,outcomes[n],x[n],302,260,60,27,{color:n===1?C.red:C.green,bold:true});}
-   label(s,'CAPTURED BYPASS',64,381,550,C.red);label(s,'CAPTURED REJECTION',664,381,550,C.green);
+   const x=[64,359,654,949],titles=['Wrong password','Attack payload','Same attack after fix','Correct password'];const outcomes=['Login rejected','Attack succeeds\nLogged in as Alice','Attack stopped\nNo database query','Legitimate login\nworks'];
+   for(let n=0;n<4;n++){label(s,String(n+1).padStart(2,'0'),x[n],159,250,n===1?C.red:C.blue);t(s,titles[n],x[n],207,260,78,27,{bold:true});t(s,outcomes[n],x[n],292,260,78,23,{color:n===1?C.red:C.green,bold:true});}
+   label(s,'CAPTURED ATTACK SUCCESS',64,381,550,C.red);label(s,'CAPTURED ATTACK REJECTION',664,381,550,C.green);
    await image(s,'fresh-02-decision.png',64,420,552,213);await image(s,'fresh-03-decision.png',664,420,552,213);
    const link=t(s,'Live lab: http://127.0.0.1:4400     Offline video: 90 seconds',64,643,1110,26,18,{color:C.blue});link.text.get('http://127.0.0.1:4400').link={uri:'http://127.0.0.1:4400',isExternal:true};break;}
   case 'results':{
-   const vals=[['Configuration','Attack result','Find queries','Valid login']];
-   for(const [mode,name] of [['baseline','Baseline'],['noscripting','JavaScript disabled'],['readonly','Read-only DB account'],['validated','String validation'],['hardened','Full hardened login']]){const r=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C04');const v=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C01');if(!r||v.status!==200)throw Error('Evidence mismatch');vals.push([name,r.status===200?'BYPASS / 200':'BLOCKED / 400',String(r.findCommands),'Works / 200']);}
-   const tb=tab(s,vals,[398,280,220,254],164,356,25);
-   for(let n=1;n<6;n++){tb.getCell(n,1).fill=n<4?C.paleRed:C.paleGreen;tb.getCell(n,1).text.style={fontSize:25,typeface:'Arial',bold:true,color:n<4?C.red:C.green};tb.getCell(n,3).fill=C.paleGreen;}
-   t(s,'Scripting control: this attack uses an ordinary query operator.\nRead-only control: this attack needs a read, not a write.',64,547,1152,90,26);
+   const vals=[['Configuration','Attack outcome','Database query','Correct login']];
+   for(const [mode,name] of [['baseline','Baseline'],['noscripting','JavaScript disabled'],['readonly','Read-only DB account'],['validated','String validation'],['hardened','Full hardened login']]){const r=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C04');const v=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C01');if(!r||v.status!==200)throw Error('Evidence mismatch');vals.push([name,r.status===200?'Attack succeeds (200)':'Attack stopped (400)',r.findCommands?'1 query sent':'No query sent','Login works (200)']);}
+   const tb=tab(s,vals,[360,315,225,252],164,356,22);
+   for(let n=1;n<6;n++){tb.getCell(n,1).fill=n<4?C.paleRed:C.paleGreen;tb.getCell(n,1).text.style={fontSize:22,typeface:'Arial',bold:true,color:n<4?C.red:C.green};tb.getCell(n,3).fill=C.paleGreen;}
+   t(s,'Disabling scripting does not affect this query operator.\nRead-only access still permits the one read needed by the attack.',64,547,1152,90,26);
    break;}
   case 'fix':
-   label(s,'MINIMAL TESTED CONTROL',64,159,1100,C.green);t(s,'Reject username or password if it is not a string.',64,205,1140,58,33,{bold:true,color:C.green});line(s,64,295,1152);
-   label(s,'COMPLETE LOGIN DESIGN',64,326,1150,C.blue);
-   ['Validate input','Find account','Verify hash','Create session'].forEach((v,j)=>{stage=j+1;node(s,'0'+(j+1),v,['Exactly two fields\nNon-empty strings\nLength limits','Use validated\nusername only','Check supplied\npassword against\nstored scrypt hash','Only after\nverification\nsucceeds'][j],64+j*300,382,240,j===3?C.green:C.blue);if(j<3)arr(s,313+j*300,466,38,C.blue);});stage=0;break;
+   label(s,'WHY THE ATTACK FAILS',64,159,1100,C.green);t(s,'The password object is not text, so the app rejects it before MongoDB sees it.',64,205,1140,72,31,{bold:true,color:C.green});line(s,64,295,1152);
+   label(s,'SAFE LOGIN FLOW',64,326,1150,C.blue);
+   ['Accept text only','Find the account','Check the password','Create a session'].forEach((v,j)=>{stage=j+1;node(s,'0'+(j+1),v,['Username and password\nmust be non-empty text','MongoDB uses the\nusername only','App compares the input\nwith the stored hash','Only if the\npassword matches'][j],64+j*300,382,240,j===3?C.green:C.blue);if(j<3)arr(s,313+j*300,466,38,C.blue);});stage=0;break;
   case 'interpreters':
-   label(s,'MEASURED OPERATOR INJECTION',64,158,1100,C.red);
-   box(s,'Object with $ne',64,214,310,85,C.red,C.paleRed);arr(s,395,246,54,C.red);box(s,'Query engine',473,214,315,85,C.red);arr(s,809,246,54,C.red);t(s,'Changed condition',890,229,325,70,28,{bold:true,color:C.red});
-   t(s,'Control: require credential strings and construct the query in application code.',64,322,1152,65,27);
+   label(s,'MEASURED IN OUR LAB',64,158,1100,C.red);
+   box(s,'Object contains\n$ne',64,214,310,85,C.red,C.paleRed,25);arr(s,395,246,54,C.red);box(s,'MongoDB reads a\nquery condition',473,214,315,85,C.red,C.bg,24);arr(s,809,246,54,C.red);t(s,'Changes which\nrecords match',890,220,325,80,26,{bold:true,color:C.red});
+   t(s,'Control: for login fields, accept text only and build the query in application code.',64,322,1152,65,26);
    line(s,64,406,1152);label(s,'LITERATURE COMPARISON',64,436,1100,C.blue);
-   box(s,'String inside source',64,483,310,85,C.blue,C.paleBlue);arr(s,395,516,54,C.blue);box(s,'JavaScript engine',473,483,315,85,C.blue);arr(s,809,516,54,C.blue);t(s,'Changed program',890,498,325,70,28,{bold:true,color:C.blue});
-   t(s,'Control: avoid source construction and disable unused scripting.',64,594,1152,40,27);
-   t(s,'Our fixed $where probe checks configuration only.',64,637,1152,30,19,{color:C.muted});break;
+   box(s,'Text inserted into\nJavaScript source',64,483,310,85,C.blue,C.paleBlue,24);arr(s,395,516,54,C.blue);box(s,'JavaScript engine\nexecutes the source',473,483,315,85,C.blue,C.bg,24);arr(s,809,516,54,C.blue);t(s,'Changes program\nlogic',890,489,325,80,26,{bold:true,color:C.blue});
+   t(s,'Control: do not build code from user text; disable unused scripting.',64,594,1152,40,26);
+   t(s,'We measured the first row. The fixed $where probe checked the server setting only.',64,637,1152,30,19,{color:C.muted});break;
   case 'findings':{
-   const content=[['1','The input can change the check','Operator object creates an Alice session','200 / bypass',C.red],['2','Validation stops this payload','Rejected before the database query','0 finds',C.green],['3','Correct login still works','Correct credentials retain protected access','200 / valid',C.blue]];
-   content.forEach(([n,a,b,c,col],j)=>{const y=173+j*141;t(s,n,64,y,65,65,43,{bold:true,color:col});t(s,a,160,y,782,48,32,{bold:true});t(s,b,160,y+61,790,48,25,{color:C.muted});t(s,c,970,y+15,246,60,30,{bold:true,color:col});if(j<2)line(s,160,y+116,1056);});
+   const content=[['1','The attack succeeds','Operator object logs the attacker in as Alice','Session created\nHTTP 200',C.red],['2','The attack is stopped','Object rejected before MongoDB receives a query','No query sent\nHTTP 400',C.green],['3','Legitimate login still works','Correct credentials retain protected access','Access granted\nHTTP 200',C.blue]];
+   content.forEach(([n,a,b,c,col],j)=>{const y=173+j*141;t(s,n,64,y,65,65,43,{bold:true,color:col});t(s,a,160,y,782,48,32,{bold:true});t(s,b,160,y+61,790,48,25,{color:C.muted});t(s,c,970,y+6,246,78,25,{bold:true,color:col});if(j<2)line(s,160,y+116,1056);});
    t(s,'Scope: one recorded stack, synthetic accounts and 15 request cases.',64,617,1152,40,24,{color:C.muted});break;}
   case 'conclusion':
    t(s,'Choose the query structure.\nValidate values. Verify the password.',64,171,1152,143,45,{bold:true,color:C.white});
@@ -128,26 +128,27 @@ export async function buildRevised(p,root){
   case 'cases1':case 'cases2':{
    const start=d.layout==='cases1'?0:8,end=d.layout==='cases1'?8:15;
    const rs=evidence.results.filter(r=>r.configuration==='baseline'&&r.repetition===1).slice(start,end);
-   const vals=[['Case','Request shape','Three toy modes','Validated / hardened']];
-   rs.forEach(r=>{const fixed=evidence.results.find(q=>q.caseId===r.caseId&&q.configuration==='hardened'&&q.repetition===1);vals.push([r.caseId,r.case,String(r.status),String(fixed.status)]);});
-   const tb=tab(s,vals,[98,556,222,276],160,428,22);
-   rs.forEach((r,j)=>{if(['C04','C13'].includes(r.caseId))tb.getCell(j+1,2).fill=C.paleRed;if(vals[j+1][3]==='400')tb.getCell(j+1,3).fill=C.paleGreen;});
-   t(s,'Toy modes = baseline, scripting disabled, read-only. Both runs agree.',64,612,1152,37,22,{color:C.muted});
-   t(s,'200: session + access     401: failed login     400: rejected before query',64,651,1080,30,18,{color:C.muted});break;}
+   const outcome=(status,id,fixed=false)=>status===200?(id==='C01'?'Login succeeds':(['C04','C13'].includes(id)?'Attack succeeds':'Request accepted')):status===401?'Login rejected':fixed?'Stopped before query':'Request rejected';
+   const vals=[['Case','Request shape','Three vulnerable modes','Protected modes']];
+   rs.forEach(r=>{const fixed=evidence.results.find(q=>q.caseId===r.caseId&&q.configuration==='hardened'&&q.repetition===1);vals.push([r.caseId,r.case,outcome(r.status,r.caseId),outcome(fixed.status,r.caseId,true)]);});
+   const tb=tab(s,vals,[98,454,300,300],160,428,20);
+   rs.forEach((r,j)=>{if(['C04','C13'].includes(r.caseId))tb.getCell(j+1,2).fill=C.paleRed;if(evidence.results.find(q=>q.caseId===r.caseId&&q.configuration==='hardened'&&q.repetition===1).status===400)tb.getCell(j+1,3).fill=C.paleGreen;});
+   t(s,'Vulnerable modes: baseline, scripting disabled and read-only. Both runs agree.',64,612,1152,37,21,{color:C.muted});
+   t(s,'HTTP codes are secondary evidence: 200 accepted, 401 login rejected, 400 stopped before query.',64,651,1080,30,17,{color:C.muted});break;}
   case 'probes':
-   tab(s,[['Control','Independent observation'],['Read-only identity','Authenticated as labreader / read role'],['Read permitted','Alice lookup succeeds'],['Write denied','MongoDB Unauthorized / code 13'],['Scripting enabled','Fixed $where expression returns Alice'],['Scripting disabled','Same expression fails / code 6108304']],[423,729],177,377,25);
-   take(s,'Both controls are active. Neither stops the C04 login bypass.',C.red,591);
+   tab(s,[['Control','Independent observation'],['Read-only identity','Authenticated as labreader with the read role'],['Read permitted','Alice lookup succeeds'],['Write denied','MongoDB blocks the write (error 13)'],['Scripting enabled','The fixed $where probe returns Alice'],['Scripting disabled','The same probe fails as expected (error 6108304)']],[423,729],177,377,24);
+   take(s,'Both controls are active, but neither stops attack C04.',C.red,591);
    t(s,'The fixed $where expression tests configuration, not attacker-controlled JavaScript.',64,651,1080,30,18,{color:C.muted});break;
   case 'capture1':case 'capture2':{
    const attack=d.layout==='capture1',col=attack?C.red:C.green;
-   label(s,attack?'VULNERABLE BASELINE':'FULL HARDENED LOGIN',64,155,1152,col);
+   label(s,attack?'VULNERABLE LOGIN':'HARDENED LOGIN',64,155,1152,col);
    t(s,'{"username":"alice","password":{"$ne":""}}',64,203,1152,61,30,{mono:true,color:col});
-   label(s,'IDENTICAL REQUEST / ACTUAL RESPONSE REGION',64,294,1152,C.muted);
+   label(s,'SAME ATTACK REQUEST AND ACTUAL RESPONSE',64,294,1152,C.muted);
    await image(s,attack?'fresh-02-evidence.png':'fresh-03-evidence.png',64,333,1152,320);
    break;}
   case 'limits':
    label(s,'ESTABLISHED',64,179,540,C.green);label(s,'NOT ESTABLISHED',704,179,510,C.muted);
-   t(s,'This operator bypass\nBehaviour of five configurations\nRejection before a find query\nPreservation of correct login',64,243,555,270,30);
+   t(s,'This operator attack succeeds\nBehaviour of five configurations\nRejection before a find query\nPreservation of correct login',64,243,555,270,30);
    t(s,'A JavaScript exploit\nReal-world prevalence\nAll drivers or DB versions\nAdministrator access\nComplete production security',704,243,510,300,30);
    take(s,'Next experiment: permitted search without cross-tenant access.',C.ink,596);break;
   case 'references1':

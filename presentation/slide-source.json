@@ -26,7 +26,7 @@
   {
     "slide": 4,
     "title": "The paper covers several attack boundaries",
-    "notes": "Target time: 0:40\n\nRon and colleagues describe five classes. We group their query examples together here, and keep the original names in the small labels. Other inputs can become JavaScript source or an extra protocol command. Their origin-violation example is cross-site request forgery: a browser performs an unwanted action using a user's authority. Our experiment tests the highlighted operator route. Later we compare it with JavaScript injection conceptually. The research question is which controls stop this particular login bypass.\n\nSources: https://www.infoq.com/articles/nosql-injections-analysis/\nhttps://www.researchgate.net/publication/300367234_Analysis_and_Mitigation_of_NoSQL_Injections",
+    "notes": "Target time: 0:40\n\nRon and colleagues describe five classes. We group their query examples together here, and keep the original names in the small labels. Other inputs can become JavaScript source or an extra protocol command. Their origin-violation example is cross-site request forgery: a browser performs an unwanted action using a user's authority. Our experiment tests the highlighted operator route. Later we compare it with JavaScript injection conceptually. The research question is which controls stop this attack from creating a login session.\n\nSources: https://www.infoq.com/articles/nosql-injections-analysis/\nhttps://www.researchgate.net/publication/300367234_Analysis_and_Mitigation_of_NoSQL_Injections",
     "core": "The literature is broader than the one mechanism we test.",
     "owner": "Pheobe Neo",
     "seconds": 40
@@ -42,7 +42,7 @@
   {
     "slide": 6,
     "title": "An object and a string behave differently",
-    "notes": "Target time: 0:45\n\nThese inputs look similar but have different types. The first is an object, so MongoDB recognises the operator and Alice matches. The second is a string containing the same characters. In this query it stays ordinary text and fails to match her stored password. We tested that second case as a negative control. Our bypass also assumes that the endpoint accepts objects, Alice's stored password is non-empty, and any returned record creates a session. Those assumptions define the claim we can test.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/ne/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html\nProject evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
+    "notes": "Target time: 0:45\n\nThese inputs look similar but have different types. The first is an object, so MongoDB recognises the operator and Alice matches. The second is a string containing the same characters. In this query it stays ordinary text and fails to match her stored password. We tested that second case as a negative control. The attack also assumes that the endpoint accepts objects, Alice's stored password is non-empty, and any returned record creates a session. Those assumptions define the claim we can test.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/ne/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html\nProject evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
     "core": "The parsed type changes how MongoDB interprets the value.",
     "owner": "Pheobe Neo",
     "seconds": 45
@@ -58,40 +58,40 @@
   {
     "slide": 8,
     "title": "Same attack, different login decision",
-    "notes": "Target time: 1:30\n\nFirst, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path creates an Alice session and opens her synthetic private notes. We submit the identical request to the hardened path. It rejects the input before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
-    "core": "The fix blocks the attack while preserving correct login.",
+    "notes": "Target time: 1:30\n\nFirst, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path accepts the attack, logs us in as Alice and opens her synthetic private notes. We submit the same attack request to the hardened path. It rejects the object before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
+    "core": "The fix stops the attack while preserving correct login.",
     "owner": "Kendrick Poon",
     "seconds": 90
   },
   {
     "slide": 9,
-    "title": "Which controls stopped the bypass?",
-    "notes": "Target time: 1:00\n\nThe same operator request succeeds in the baseline, with JavaScript disabled, and with a read-only database account. Each sends one find command. Both validation paths reject it before a find command. Correct credentials still work in all five configurations. Disabling scripting does not stop a normal query operator. Read-only access prevents writes, but this bypass needs only a read. The isolated validation comparison identifies the effective change: the application rejects the unexpected password object before building the query. The appendix contains every case, including wrong-password controls.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
+    "title": "Which controls stopped the attack?",
+    "notes": "Target time: 1:00\n\nThe same attack request succeeds in the baseline, with JavaScript disabled, and with a read-only database account. In each case, the app sends one query and logs in as Alice. Both validation paths stop the attack before any query. Correct credentials still work in all five configurations. Disabling scripting does not stop a normal query operator. Read-only access prevents writes, but this attack needs only a read. The isolated validation comparison identifies the effective change: the application rejects the unexpected password object before building the query. The numbers in parentheses are HTTP response codes. They support the result, but the important outcome is whether the attack created a session.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
     "core": "Input validation blocks this payload; scripting and privilege controls address other risks.",
     "owner": "Kendrick Poon",
     "seconds": 60
   },
   {
     "slide": 10,
-    "title": "A login needs separate password verification",
-    "notes": "Target time: 0:50\n\nThe minimal experimental control rejects non-string credentials. The full login checks the expected fields, non-empty values and length limits. It looks up the account by the validated username only, then verifies the supplied password against a salted scrypt hash. A session is created only after verification succeeds. Hashing protects stored credentials; validation protects how input enters the query. We test both. This remains a teaching implementation: deployment protections such as transport security and rate limiting still need their own design and tests.\n\nSources: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html\nProject evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
-    "core": "Validate inputs, find the account, then prove knowledge of its password.",
+    "title": "A safe login keeps the password out of the query",
+    "notes": "Target time: 0:50\n\nThe attack payload fails at the first step because its password is an object, not text. For a legitimate request, the application accepts only the expected username and password strings. It asks MongoDB for the account using the username alone, so the password cannot change the query. The application then compares the submitted password with the stored hash. A password hash is a one-way stored verifier; the hardened account collection does not store the plaintext password. Only a successful comparison creates a session. This separation is the complete idea: validate the request, look up the account, verify the password and then decide whether to log in.\n\nSources: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html\nProject evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
+    "core": "The password is verification input, never a client-controlled database condition.",
     "owner": "Liu Qingyu",
     "seconds": 50
   },
   {
     "slide": 11,
-    "title": "The defence depends on what reads the input",
-    "notes": "Target time: 0:40\n\nOur measured input is an object interpreted by MongoDB's query engine. In a different design, an application may concatenate a string into JavaScript source and pass it to a database scripting feature such as dollar-where. A string type check would accept that input type. The safer design avoids building executable source from client values and disables unused scripting. This is a literature comparison. Our fixed, harmless dollar-where probe only checks configuration; it is not a second injection exploit.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/where/\nhttps://www.infoq.com/articles/nosql-injections-analysis/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
-    "core": "An object can become a query; a string can become JavaScript source.",
+    "title": "Different injection types need different defences",
+    "notes": "Target time: 0:40\n\nThe first row is our measured attack. A JSON object contains dollar-ne, and MongoDB reads it as a query condition. That changes which record matches. Requiring text in login fields and building the query in application code stops this route. The second row comes from the literature. An application may insert user text into JavaScript source, and the JavaScript engine then executes changed program logic. Prevent that by never building code from user text and by disabling scripting when it is unused. We did not demonstrate the second attack. Our fixed dollar-where probe only checked whether scripting was enabled.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/where/\nhttps://www.infoq.com/articles/nosql-injections-analysis/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
+    "core": "The right defence depends on how the system interprets the input.",
     "owner": "Liu Qingyu",
     "seconds": 40
   },
   {
     "slide": 12,
-    "title": "What the experiment establishes",
-    "notes": "Target time: 0:35\n\nThree observations support our conclusion. The operator object creates a false Alice session in the vulnerable path. Validation rejects that same input before a database query. Correct credentials still work after the fix. These claims are about our known account, fifteen request cases and recorded MongoDB stack. We have not demonstrated a JavaScript exploit or measured how common this problem is in deployed systems. That limited claim is still useful because it identifies a concrete mistake and a tested correction.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
-    "core": "A useful fix must stop the bypass and retain legitimate access.",
+    "title": "What our experiment shows",
+    "notes": "Target time: 0:35\n\nThree observations support our conclusion. First, the operator object logs the attacker in as Alice in the vulnerable path. Second, validation rejects that same input before MongoDB receives a query. Third, correct credentials still work after the fix. The slide states the security outcome first and places the HTTP response code beneath it as supporting evidence. These claims cover our known account, fifteen request cases and recorded MongoDB stack. We have not demonstrated a JavaScript exploit or measured how common this problem is in deployed systems.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
+    "core": "A useful fix must stop the attack and retain legitimate access.",
     "owner": "Liu Qingyu",
     "seconds": 35
   },
@@ -130,7 +130,7 @@
   {
     "slide": 17,
     "title": "Case results C01 to C08",
-    "notes": "Target time: Q&A\n\nThe three toy configurations are baseline, scripting disabled and read-only. They agree for these cases. Validated and hardened modes agree on HTTP status, while their password-verification designs differ. Both repetitions agree. 200 means a session and protected access, 401 means authentication failure, and 400 means rejection before a find command.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
+    "notes": "Target time: Q&A\n\nThe three vulnerable configurations are baseline, scripting disabled and read-only. They agree for these cases. The protected configurations are string validation and the full hardened login. They agree on the displayed request outcome, although their password-verification designs differ. Both repetitions agree. Plain-language outcomes appear in the cells; the HTTP codes are retained only in the footer as secondary evidence.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
     "core": "Controls and unexpected types are part of the test set.",
     "owner": "Q&A",
     "seconds": 0
@@ -153,7 +153,7 @@
   },
   {
     "slide": 20,
-    "title": "Captured bypass evidence",
+    "title": "Captured evidence: attack succeeds",
     "notes": "Target time: Q&A\n\nFresh browser evidence captured on 1 November 2026 from the same local teaching lab. The request is Alice plus the password operator object. The unmodified response region shows the query, session decision and protected-note outcome. Full-page captures accompany the deck.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
     "core": "The operator object produces a session and protected access.",
     "owner": "Q&A",
@@ -161,16 +161,16 @@
   },
   {
     "slide": 21,
-    "title": "Captured rejection evidence",
+    "title": "Captured evidence: attack stopped",
     "notes": "Target time: Q&A\n\nThe hardened mode receives the same payload. The application reports rejection before filter construction, no database query and denied protected access. Valid credentials also succeed in the separate functional control. Full-page captures accompany the deck.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
-    "core": "The identical operator object is rejected before querying.",
+    "core": "The same operator object is rejected before querying.",
     "owner": "Q&A",
     "seconds": 0
   },
   {
     "slide": 22,
     "title": "What remains untested",
-    "notes": "Target time: Q&A\n\nThe study establishes this login bypass and the tested control outcomes in the recorded environment. It does not measure deployed prevalence, prove administrator access, cover all drivers or MongoDB versions, demonstrate JavaScript injection, or certify production security. A tenant-filter experiment is a proposed next study.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
+    "notes": "Target time: Q&A\n\nThe study establishes that this operator payload creates a login session in the vulnerable path and records how the tested controls respond. It does not measure deployed prevalence, prove administrator access, cover all drivers or MongoDB versions, demonstrate JavaScript injection, or certify production security. A tenant-filter experiment is a proposed next study.\n\nSources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
     "core": "The conclusions are bounded by the experimental design.",
     "owner": "Q&A",
     "seconds": 0
