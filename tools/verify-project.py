@@ -37,7 +37,7 @@ for slide in source[:13]:
     planned_seconds+=int(match[1])*60+int(match[2])
 assert planned_seconds < 720, 'Planned main talk must stay below the 12-minute hard stop'
 ns={'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
-with zipfile.ZipFile(root/'deliverables/CS440-NoSQL-Injections-Final-Deck.pptx') as z:
+with zipfile.ZipFile(root/'deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pptx') as z:
     assert z.testzip() is None
     slides=[n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide[0-9]+\.xml',n)]
     notes=[n for n in z.namelist() if re.fullmatch(r'ppt/notesSlides/notesSlide[0-9]+\.xml',n)]
@@ -45,7 +45,7 @@ with zipfile.ZipFile(root/'deliverables/CS440-NoSQL-Injections-Final-Deck.pptx')
     tables=sum(len(ET.fromstring(z.read(n)).findall('.//a:tbl',ns)) for n in slides)
     assert tables==5
     media=[n for n in z.namelist() if n.startswith('ppt/media/')]
-    assert len(media)>=5 and all(len(z.read(n))>64 for n in media), 'Missing embedded image bytes'
+    assert len(media)>=7 and all(len(z.read(n))>64 for n in media), 'Missing embedded visual or evidence bytes'
     for n in notes:
         text=' '.join(t.text or '' for t in ET.fromstring(z.read(n)).findall('.//a:t',ns))
         assert 'Target time:' in text and 'Sources:' in text

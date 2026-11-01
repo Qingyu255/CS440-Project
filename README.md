@@ -8,8 +8,8 @@ The local synthetic lab follows an injected JSON request through query construct
 
 ## Presentation and preparation
 
-- [Editable deck](deliverables/CS440-NoSQL-Injections-Final-Deck.pptx)
-- [Portable PDF](deliverables/CS440-NoSQL-Injections-Final-Deck.pdf)
+- [Editable visual-upgrade deck](deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pptx)
+- [Portable visual-upgrade PDF](deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pdf)
 - [Team handover guide](deliverables/CS440-Team-Handover.docx)
 - [Speaker script](deliverables/Speaker-Script.md)
 - [Q&A defence pack](deliverables/Q-and-A-Defence-Pack.md)

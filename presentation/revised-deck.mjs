@@ -10,27 +10,35 @@ export async function buildRevised(p,root){
   sh.text=str;sh.text.style={typeface:opt.mono?'Courier New':'Arial',fontSize:size,color:opt.color||C.ink,bold:!!opt.bold,autoFit:'none',wrap:'square',alignment:opt.align||'left',insets:{top:0,right:0,bottom:0,left:0}};return sh;
  };
  const line=(s,x,y,w,color=C.line)=>s.shapes.add({geometry:'rect',name:`${stage?'reveal'+stage:'line'}-${++serial}`,position:{left:x,top:y,width:w,height:2},fill:color,line:{fill:'none',width:0}});
+ const panel=(s,x,y,w,h,fill=C.white,stroke=C.line,strokeWidth=1)=>s.shapes.add({geometry:'rect',name:`${stage?'reveal'+stage:'panel'}-${++serial}`,position:{left:x,top:y,width:w,height:h},fill,line:{fill:stroke,width:strokeWidth}});
+ const vline=(s,x,y,h,color=C.line)=>s.shapes.add({geometry:'rect',name:`${stage?'reveal'+stage:'vline'}-${++serial}`,position:{left:x,top:y,width:2,height:h},fill:color,line:{fill:'none',width:0}});
  const box=(s,str,x,y,w,h,color=C.blue,fill=C.bg,size=27)=>{const b=s.shapes.add({geometry:'rect',name:`${stage?'reveal'+stage:'node'}-${++serial}`,position:{left:x,top:y,width:w,height:h},fill,line:{fill:color,width:2}});b.text=str;b.text.style={typeface:'Arial',fontSize:size,bold:true,color,alignment:'center',verticalAlignment:'middle',insets:{left:12,right:12,top:10,bottom:10},autoFit:'none'};return b;};
  const arr=(s,x,y,w=54,color=C.muted)=>{s.shapes.add({geometry:'rightArrow',name:`${stage?'reveal'+stage:'arrow'}-${++serial}`,position:{left:x,top:y,width:w,height:22},fill:color,line:{fill:'none',width:0}});};
+ const downArr=(s,x,y,h=48,color=C.muted)=>{s.shapes.add({geometry:'downArrow',name:`${stage?'reveal'+stage:'down-arrow'}-${++serial}`,position:{left:x,top:y,width:22,height:h},fill:color,line:{fill:'none',width:0}});};
  const label=(s,str,x,y,w=520,color=C.muted)=>t(s,str,x,y,w,34,22,{bold:true,color});
  const take=(s,str,color=C.ink,y=594)=>t(s,str,64,y,1152,58,30,{bold:true,color});
  const image=async(s,name,x,y,w,h)=>{s.images.add({blob:new Uint8Array(await fs.readFile(path.join(root,'nosql-lab/evidence/browser',name))),contentType:'image/png',alt:`Actual local browser result: ${name}`,fit:'contain',position:{left:x,top:y,width:w,height:h}});};
  const tab=(s,values,widths,y=180,h=340,size=25)=>{const tb=s.tables.add({rows:values.length,columns:values[0].length,left:64,top:y,width:1152,height:h,values,columnWidths:widths});tb.cells.block({row:0,column:0,rowCount:values.length,columnCount:values[0].length}).assign({fill:C.bg,textStyle:{typeface:'Arial',fontSize:size,color:C.ink},margins:{left:14,right:14,top:8,bottom:8},anchor:'center'});for(let j=0;j<values[0].length;j++){tb.getCell(0,j).fill=C.ink;tb.getCell(0,j).text.style={typeface:'Arial',fontSize:size,bold:true,color:C.white};}tb.borders.assign({fill:C.line,width:1,style:'solid'});tableOwners.push(authored.length);return tb;};
  const node=(s,num,heading,body,x,y,w=220,color=C.blue)=>{t(s,num,x,y,w,44,34,{color,bold:true});line(s,x,y+57,w,color);t(s,heading,x,y+80,w,82,29,{bold:true,color});t(s,body,x,y+173,w,100,25);};
+ const assetImage=async(s,name,alt,x,y,w,h,fit='cover')=>{s.images.add({blob:new Uint8Array(await fs.readFile(path.join(root,'presentation/assets',name))),contentType:'image/png',alt,fit,position:{left:x,top:y,width:w,height:h}});};
  for(let i=0;i<slides.length;i++){
   const d=slides[i],s=p.slides.add(),dark=i===0||i===12;
   stage=0;s.background.fill=dark?C.ink:C.bg;s.speakerNotes.textFrame.setText(notes(d));authored.push({slide:s,...d});
-  t(s,d.title,64,44,1152,94,i===0?46:41,{bold:true,color:dark?C.white:C.ink});
+  if(i===0)await assetImage(s,'nosql-cover-hero-v2.png','Conceptual illustration of a document database authentication bypass',0,0,1280,720);
+  if(i===12)await assetImage(s,'query-control-future-work-v2.png','Conceptual illustration of fixed query policy preserving separated data',0,0,1280,720);
+  t(s,d.title,64,44,i===0?520:i===12?590:1152,94,i===0?28:i===12?38:41,{bold:true,color:dark?C.white:C.ink});
   t(s,String(i+1).padStart(2,'0'),1164,672,52,28,19,{color:dark?'#BAC8CC':C.muted});
   const foot=i<13?['Ron et al., 2016 / controlled local reproduction','MongoDB 7.0 $ne documentation / illustrative teaching record','Threat model / local synthetic records','Ron et al., 2016 / author manuscript and republication','C04 / native MongoDB driver / synthetic plaintext reproduction','C04 object and C06 string controls','15 cases × 5 configurations × 2 runs / results.json','Actual browser captures / local synthetic lab / 1 November 2026','Focal attack C04 / complete matrix in slides 17–18','Local source / OWASP NoSQL and password-storage guidance','Literature comparison / MongoDB 7.0 $where documentation','Recorded local experiment / results.json and results.csv','Proposed follow-up study / OWASP NoSQL guidance'][i]:'';
   if(foot)t(s,foot,64,671,1060,30,16,{color:dark?'#BAC8CC':C.muted});
   switch(d.layout){
   case 'cover':
-   t(s,'A login without\nthe password',64,190,1090,165,64,{bold:true,color:C.white});
-   t(s,'"password": "wrong"',64,405,550,56,31,{mono:true,color:'#BAC8CC'});arr(s,618,416,60,'#BAC8CC');
-   t(s,'{ "$ne": "" }',730,405,450,56,35,{mono:true,color:'#F4A5B0'});
-   t(s,'A controlled comparison of five login configurations',64,499,1100,56,28,{color:'#BAC8CC'});
-   t(s,team.join('  /  '),64,585,1115,54,22,{color:C.white});break;
+   t(s,'A login without\nthe password',64,154,535,170,62,{bold:true,color:C.white});
+   panel(s,64,362,520,132,'#0E202A','#39515D',1);
+   t(s,'ATTACK PAYLOAD',84,382,470,28,18,{bold:true,color:'#BAC8CC'});
+   t(s,'{ "password": { "$ne": "" } }',84,423,470,46,25,{mono:true,color:'#F4A5B0',bold:true});
+   t(s,'One object changes the meaning of the login query.',84,470,470,30,20,{color:C.white});
+   t(s,'Controlled experiment across five login configurations',64,526,535,62,22,{color:'#BAC8CC'});
+   t(s,team.join('  /  '),64,604,565,36,19,{color:C.white});break;
   case 'primer':
    label(s,'DOCUMENT = A STORED RECORD',64,158);
    t(s,'{ username: "alice", password: "…" }',64,201,1152,56,32,{mono:true});
@@ -45,74 +53,121 @@ export async function buildRevised(p,root){
    take(s,'Predicate = condition     $ne = not equal     "" = empty string',C.ink,570);
    t(s,'NoSQL models: document, key-value, graph, wide-column. Here: MongoDB documents.',64,638,1152,30,20,{color:C.muted});break;
   case 'flow':{
-   const xs=[64,302,540,778,1016];const heads=['Client','Application','MongoDB','Session','Private notes'];const sub=['Sends JSON','Builds query','Returns Alice','Remembers Alice','Allows access'];
-   for(let n=0;n<5;n++){box(s,heads[n],xs[n],215,200,90,n===0||n>2?C.red:C.blue);t(s,sub[n],xs[n],335,200,80,24);if(n<4)arr(s,xs[n]+205,248,28);}
-   label(s,'THE ATTACKER CONTROLS THE REQUEST',64,161,1100,C.red);
-   t(s,'The failure occurs when input changes the query condition.',64,452,1145,66,32,{bold:true,color:C.red});
-   t(s,'Known username, no direct database access, no changes to stored records',64,541,1145,60,25);
+   label(s,'THE TRUST BOUNDARY',64,153,1100,C.red);
+   panel(s,64,199,300,190,C.paleRed,C.red,2);
+   t(s,'01',84,219,70,45,32,{bold:true,color:C.red});
+   t(s,'Attacker controls\nthe request',84,270,250,61,25,{bold:true,color:C.red});
+   t(s,'Knows "alice" and controls\nthe JSON body',84,336,250,48,19);
+   arr(s,390,277,48,C.red);
+   panel(s,464,199,342,190,C.white,C.red,3);
+   t(s,'02  APPLICATION',486,219,290,38,23,{bold:true,color:C.red});
+   t(s,'Copies request values\ninto the query',486,273,290,68,27,{bold:true});
+   t(s,'The client changes what the password check means.',486,350,290,38,17,{color:C.muted});
+   arr(s,832,277,48,C.blue);
+   panel(s,906,199,310,190,C.paleBlue,C.blue,2);
+   t(s,'03  MONGODB',928,219,260,38,23,{bold:true,color:C.blue});
+   t(s,'Returns Alice',928,284,260,44,32,{bold:true,color:C.blue});
+   t(s,'The query condition is true for the stored record.',928,341,260,42,19,{color:C.muted});
+   t(s,'A database match is not password proof.',64,439,1152,58,39,{bold:true,color:C.red});
+   line(s,64,510,1152,C.red);
+   t(s,'Session created',64,545,280,42,29,{bold:true,color:C.red});arr(s,355,553,58,C.red);
+   t(s,'Alice remembered as the user',442,545,390,42,29,{bold:true});arr(s,838,553,58,C.red);
+   t(s,'Private notes exposed',925,545,291,42,29,{bold:true,color:C.red});
+   t(s,'Threat model: no direct database access and no modification of stored records.',64,621,1152,31,20,{color:C.muted});
    break;}
   case 'landscape':{
-   label(s,'INPUT ENTERS…',64,158);label(s,'WHAT CAN CHANGE',614,158);
-   const rows=[['Query conditions','Operator object changes a condition','Tautologies / our experiment',C.red],['Query text','Added logic changes which records match','“Union queries” / literature',C.muted],['JavaScript source','String becomes executable source','JavaScript injection / comparison',C.blue],['A protocol command','A separator introduces another command','Piggybacked queries / literature',C.muted],['A trusted browser','Browser sends an unwanted action','Origin violation / CSRF / adjacent issue',C.muted]];
-   rows.forEach(([a,b,c,color],j)=>{const y=207+j*77;t(s,a,64,y,450,40,28,{bold:true,color});arr(s,527,y+7,45,color);t(s,b,614,y,595,35,25,{color});t(s,c,614,y+34,595,32,18,{color:C.muted});});
-   take(s,'Which controls stop the highlighted operator route?',C.red,607);break;}
+   label(s,'OUR MEASURED ROUTE',64,154,1100,C.red);
+   panel(s,64,199,1152,151,C.paleRed,C.red,2);
+   t(s,'Query condition',91,230,268,48,30,{bold:true,color:C.red});arr(s,369,241,58,C.red);
+   t(s,'Operator object changes the condition',459,230,360,70,29,{bold:true,color:C.red});arr(s,830,241,58,C.red);
+   t(s,'A different record can match',920,230,265,70,29,{bold:true,color:C.red});
+   t(s,'Tautology-style operator injection in our experiment',91,307,1040,29,19,{color:C.muted});
+   label(s,'OTHER BOUNDARIES DISCUSSED IN THE PAPER',64,389,1100,C.blue);
+   const others=[['Query text','Added logic changes matching records'],['JavaScript source','Input becomes executable code'],['Protocol command','A separator adds a command'],['Trusted browser','CSRF uses a user’s authority']];
+   others.forEach(([a,b],j)=>{const x=64+j*288;t(s,a,x,444,258,38,25,{bold:true,color:j===1?C.blue:C.ink});line(s,x,489,245,j===1?C.blue:C.line);t(s,b,x,507,252,75,21,{color:C.muted});});
+   take(s,'The rest of the talk tests which controls stop the operator route.',C.red,594);break;}
   case 'mechanism':
-   label(s,'1  CLIENT REQUEST',64,159,1130,C.red);
-   t(s,'{"username":"alice","password":{"$ne":""}}',64,207,1152,60,31,{mono:true,color:C.red});
-   stage=1;label(s,'2  APPLICATION COPIES THE VALUES',64,302,620,C.blue);
-   t(s,'users.findOne({\n  username: body.username,\n  password: body.password\n})',64,352,650,175,28,{mono:true});
-   stage=2;label(s,'3  BOTH CONDITIONS MATCH',760,302,450,C.red);
-   t(s,'username equals Alice\nAND\npassword is not ""',760,352,450,145,29,{bold:true,color:C.red});
-   stage=3;take(s,'A match becomes a session without password proof.',C.red,568);
-   t(s,'For this record, the stored password is non-empty. $ne: "" also matches missing fields.',64,629,1140,35,19,{color:C.muted});stage=0;break;
+   stage=1;panel(s,64,173,326,355,C.paleRed,C.red,2);t(s,'01  CLIENT REQUEST',86,195,280,36,21,{bold:true,color:C.red});
+   t(s,'username',86,263,250,28,18,{color:C.muted});t(s,'"alice"',86,296,260,42,29,{mono:true});
+   t(s,'password',86,369,250,28,18,{color:C.muted});t(s,'{ "$ne": "" }',86,403,270,48,31,{mono:true,color:C.red,bold:true});
+   t(s,'The value is an object.',86,472,270,31,20,{color:C.red,bold:true});
+   stage=2;arr(s,410,337,46,C.red);panel(s,477,173,388,355,C.white,C.blue,2);t(s,'02  VULNERABLE APPLICATION',499,195,344,36,21,{bold:true,color:C.blue});
+   t(s,'users.findOne({',499,262,320,30,22,{mono:true});t(s,'  username: body.username,',499,302,340,30,19,{mono:true});t(s,'  password: body.password',499,342,340,30,19,{mono:true,color:C.red,bold:true});t(s,'})',499,382,320,30,22,{mono:true});
+   line(s,499,426,320,C.blue);t(s,'The app lets the request define\nthe password condition.',499,450,330,62,21,{bold:true});
+   stage=3;arr(s,885,337,46,C.red);panel(s,952,173,264,355,C.paleRed,C.red,2);t(s,'03  DATABASE',974,195,220,36,21,{bold:true,color:C.red});
+   t(s,'username\nequals Alice',974,263,220,72,27,{bold:true});t(s,'AND',974,351,220,30,21,{color:C.muted,align:'center'});t(s,'password\nis not empty',974,395,220,78,28,{bold:true,color:C.red});t(s,'MATCH',974,486,220,31,24,{bold:true,color:C.red,align:'center'});
+   stage=4;take(s,'The client changed the meaning of the password check.',C.red,565);
+   t(s,'For this synthetic record, the stored password is non-empty. $ne: "" also matches missing fields.',64,629,1140,35,19,{color:C.muted});stage=0;break;
   case 'types':
-   label(s,'OBJECT',64,174,1152,C.red);t(s,'{ "$ne": "" }',64,230,420,70,35,{mono:true,color:C.red});arr(s,500,251,70,C.red);box(s,'MongoDB operator',604,209,320,103,C.red,C.paleRed);t(s,'CONDITION TRUE\nDatabase returns Alice',970,218,246,96,25,{bold:true,color:C.red});
-   line(s,64,359,1152);
-   label(s,'STRING',64,399,1152,C.blue);t(s,'"{\\"$ne\\":\\"\\"}"',64,454,460,74,31,{mono:true,color:C.blue});arr(s,500,475,70,C.blue);box(s,'Literal text',604,433,320,103,C.blue,C.paleBlue);t(s,'CONDITION FALSE\nLogin rejected',970,442,246,96,25,{bold:true,color:C.blue});
-   take(s,'The parsed input type changes what the query means.',C.ink,586);break;
+   panel(s,64,170,544,390,C.paleRed,C.red,2);panel(s,672,170,544,390,C.paleBlue,C.blue,2);
+   label(s,'OBJECT',91,198,480,C.red);t(s,'{ "$ne": "" }',91,253,470,59,35,{mono:true,color:C.red,bold:true});line(s,91,333,470,C.red);
+   t(s,'MongoDB sees',91,361,470,30,20,{color:C.muted});t(s,'an operator condition',91,399,470,46,29,{bold:true,color:C.red});t(s,'Alice matches',91,479,470,43,31,{bold:true,color:C.red});
+   label(s,'STRING',699,198,480,C.blue);t(s,'"{\\"$ne\\":\\"\\"}"',699,253,470,59,31,{mono:true,color:C.blue,bold:true});line(s,699,333,470,C.blue);
+   t(s,'MongoDB sees',699,361,470,30,20,{color:C.muted});t(s,'ordinary literal text',699,399,470,46,29,{bold:true,color:C.blue});t(s,'Alice does not match',699,479,470,43,31,{bold:true,color:C.blue});
+   t(s,'Same characters. Different parsed types. Different query meaning.',64,596,1152,44,30,{bold:true,align:'center'});break;
   case 'experiment':
-   t(s,'15 cases',64,168,280,68,43,{bold:true});t(s,'Correct / wrong passwords\nOperator objects\nUnexpected types and fields',64,255,300,145,26);
-   arr(s,378,285,55,C.blue);
-   label(s,'5 CONFIGURATIONS',467,161,400,C.blue);
-   ['Baseline','JavaScript disabled','Read-only DB account','String validation','Full hardened login'].forEach((v,j)=>{t(s,v,467,215+j*54,344,43,26,{color:j>2?C.green:C.ink});});
-   arr(s,827,285,55,C.blue);label(s,'2 RUNS',920,161,290,C.blue);
-   t(s,'Login decision\nProtected access\nQuery count',920,239,295,160,28);
-   line(s,64,525,1152);t(s,'150 recorded case results',64,555,590,60,37,{bold:true,color:C.blue});t(s,'Control probes verify settings.\nRepeated runs show local repeatability.',695,548,520,90,23,{color:C.muted});break;
+   t(s,'15',64,174,170,85,65,{bold:true,color:C.ink});t(s,'CASES',64,267,170,33,20,{bold:true,color:C.muted});
+   t(s,'×',247,188,74,70,48,{bold:true,color:C.muted,align:'center'});
+   t(s,'5',338,174,170,85,65,{bold:true,color:C.blue});t(s,'CONFIGURATIONS',338,267,220,33,20,{bold:true,color:C.blue});
+   t(s,'×',578,188,74,70,48,{bold:true,color:C.muted,align:'center'});
+   t(s,'2',670,174,150,85,65,{bold:true,color:C.ink});t(s,'RUNS',670,267,150,33,20,{bold:true,color:C.muted});
+   t(s,'=',831,188,74,70,48,{bold:true,color:C.muted,align:'center'});
+   t(s,'150',922,174,250,85,65,{bold:true,color:C.green});t(s,'RECORDED RESULTS',922,267,250,33,20,{bold:true,color:C.green});
+   line(s,64,335,1152);
+   label(s,'FOR EVERY REQUEST, WE RECORDED',64,372,1100,C.blue);
+   t(s,'Login decision',64,430,330,48,31,{bold:true});t(s,'Did the app create a session?',64,482,330,43,22,{color:C.muted});
+   vline(s,426,423,112);t(s,'Protected access',466,430,330,48,31,{bold:true});t(s,'Could the caller open Alice’s notes?',466,482,330,43,22,{color:C.muted});
+   vline(s,828,423,112);t(s,'Database query count',868,430,348,48,31,{bold:true});t(s,'Did MongoDB receive a find command?',868,482,348,43,22,{color:C.muted});
+   panel(s,64,559,1152,69,C.paleBlue,C.blue,1);t(s,'Independent probes verify the control settings. Repeated runs show local repeatability.',88,578,1104,31,22,{color:C.blue,bold:true});break;
   case 'demo':{
-   const x=[64,359,654,949],titles=['Wrong password','Attack payload','Same attack after fix','Correct password'];const outcomes=['Login rejected','Attack succeeds\nLogged in as Alice','Attack stopped\nNo database query','Legitimate login\nworks'];
-   for(let n=0;n<4;n++){label(s,String(n+1).padStart(2,'0'),x[n],159,250,n===1?C.red:C.blue);t(s,titles[n],x[n],207,260,78,27,{bold:true});t(s,outcomes[n],x[n],292,260,78,23,{color:n===1?C.red:C.green,bold:true});}
-   label(s,'CAPTURED ATTACK SUCCESS',64,381,550,C.red);label(s,'CAPTURED ATTACK REJECTION',664,381,550,C.green);
-   await image(s,'fresh-02-decision.png',64,420,552,213);await image(s,'fresh-03-decision.png',664,420,552,213);
+   label(s,'FOUR DEMO CHECKS',64,151,1100,C.blue);
+   const x=[64,352,640,928],titles=['Wrong password','Operator object','After the fix','Correct password'];const outcomes=['Login rejected','Attack succeeds','Same attack stopped','Login works'];
+   for(let n=0;n<4;n++){t(s,String(n+1).padStart(2,'0'),x[n],198,52,35,23,{bold:true,color:n===1?C.red:n>1?C.green:C.blue});t(s,titles[n],x[n]+48,198,222,35,23,{bold:true});t(s,outcomes[n],x[n]+48,241,222,34,20,{color:n===1?C.red:n>1?C.green:C.muted,bold:true});if(n<3)vline(s,x[n]+272,192,86);}
+   line(s,64,306,1152);
+   label(s,'ATTACK SUCCEEDS',64,336,550,C.red);label(s,'SAME ATTACK IS STOPPED',664,336,550,C.green);
+   await image(s,'fresh-02-evidence.png',64,375,552,224);await image(s,'fresh-03-evidence.png',664,375,552,224);
    const link=t(s,'Live lab: http://127.0.0.1:4400     Offline video: 90 seconds',64,643,1110,26,18,{color:C.blue});link.text.get('http://127.0.0.1:4400').link={uri:'http://127.0.0.1:4400',isExternal:true};break;}
   case 'results':{
    const vals=[['Configuration','Attack outcome','Database query','Correct login']];
-   for(const [mode,name] of [['baseline','Baseline'],['noscripting','JavaScript disabled'],['readonly','Read-only DB account'],['validated','String validation'],['hardened','Full hardened login']]){const r=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C04');const v=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C01');if(!r||v.status!==200)throw Error('Evidence mismatch');vals.push([name,r.status===200?'Attack succeeds (200)':'Attack stopped (400)',r.findCommands?'1 query sent':'No query sent','Login works (200)']);}
-   const tb=tab(s,vals,[360,315,225,252],164,356,22);
+   for(const [mode,name] of [['baseline','Baseline'],['noscripting','JavaScript disabled'],['readonly','Read-only DB account'],['validated','String validation'],['hardened','Full hardened login']]){const r=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C04');const v=evidence.results.find(a=>a.configuration===mode&&a.caseId==='C01');if(!r||v.status!==200)throw Error('Evidence mismatch');vals.push([name,r.status===200?'Attack succeeds':'Attack stopped',r.findCommands?'1 query sent':'No query sent','Login works']);}
+   t(s,'3',64,145,84,62,50,{bold:true,color:C.red});t(s,'controls still allow\nthe attack',153,150,390,62,27,{bold:true,color:C.red});
+   t(s,'2',699,145,84,62,50,{bold:true,color:C.green});t(s,'application controls stop it\nbefore any query',788,150,428,62,27,{bold:true,color:C.green});
+   line(s,64,229,1152);
+   const tb=tab(s,vals,[360,315,225,252],255,286,20);
    for(let n=1;n<6;n++){tb.getCell(n,1).fill=n<4?C.paleRed:C.paleGreen;tb.getCell(n,1).text.style={fontSize:22,typeface:'Arial',bold:true,color:n<4?C.red:C.green};tb.getCell(n,3).fill=C.paleGreen;}
-   t(s,'Disabling scripting does not affect this query operator.\nRead-only access still permits the one read needed by the attack.',64,547,1152,90,26);
+   t(s,'Scripting and read-only controls do not stop this read-only operator attack.',64,567,1152,38,22,{bold:true});
+   t(s,'HTTP evidence: attack succeeds = 200; stopped before query = 400; correct login = 200.',64,612,1152,30,19,{color:C.muted});
    break;}
   case 'fix':
-   label(s,'WHY THE ATTACK FAILS',64,159,1100,C.green);t(s,'The password object is not text, so the app rejects it before MongoDB sees it.',64,205,1140,72,31,{bold:true,color:C.green});line(s,64,295,1152);
-   label(s,'SAFE LOGIN FLOW',64,326,1150,C.blue);
-   ['Accept text only','Find the account','Check the password','Create a session'].forEach((v,j)=>{stage=j+1;node(s,'0'+(j+1),v,['Username and password\nmust be non-empty text','MongoDB uses the\nusername only','App compares the input\nwith the stored hash','Only if the\npassword matches'][j],64+j*300,382,240,j===3?C.green:C.blue);if(j<3)arr(s,313+j*300,466,38,C.blue);});stage=0;break;
+   panel(s,64,164,340,450,C.paleRed,C.red,2);label(s,'ATTACK INPUT',89,190,290,C.red);
+   t(s,'password:',89,247,270,30,20,{mono:true,color:C.muted});t(s,'{ "$ne": "" }',89,284,275,52,31,{mono:true,color:C.red,bold:true});
+   downArr(s,223,348,45,C.red);box(s,'TYPE GATE',112,411,244,74,C.red,C.white,25);
+   t(s,'Password must be text',89,506,290,36,24,{bold:true,color:C.red,align:'center'});t(s,'STOPPED\nNo database query',89,553,290,55,23,{bold:true,color:C.red,align:'center'});
+   label(s,'LEGITIMATE LOGIN',468,166,748,C.blue);t(s,'The database query contains only the username.',468,212,748,42,29,{bold:true,color:C.blue});
+   panel(s,468,270,748,76,'#17252C','#17252C',0);t(s,'users.findOne({ username })',493,291,698,36,26,{mono:true,color:C.white,bold:true,align:'center'});
+   const fixHeads=['Validate strings','Find account','Verify hash','Create session'];const fixBodies=['Username and password\nare non-empty text','MongoDB receives\nusername only','App checks password\nagainst stored hash','Only after a\nsuccessful comparison'];
+   fixHeads.forEach((v,j)=>{stage=j+1;const x=468+j*192;t(s,'0'+(j+1),x,382,42,34,22,{color:j===3?C.green:C.blue,bold:true});line(s,x,425,166,j===3?C.green:C.blue);t(s,v,x,447,166,55,25,{bold:true,color:j===3?C.green:C.ink});t(s,fixBodies[j],x,513,166,72,20,{color:C.muted});if(j<3)arr(s,x+168,461,21,C.blue);});stage=0;
+   t(s,'The submitted password never becomes a database condition.',468,604,748,33,22,{bold:true,color:C.green});break;
   case 'interpreters':
-   label(s,'MEASURED IN OUR LAB',64,158,1100,C.red);
-   box(s,'Object contains\n$ne',64,214,310,85,C.red,C.paleRed,25);arr(s,395,246,54,C.red);box(s,'MongoDB reads a\nquery condition',473,214,315,85,C.red,C.bg,24);arr(s,809,246,54,C.red);t(s,'Changes which\nrecords match',890,220,325,80,26,{bold:true,color:C.red});
-   t(s,'Control: for login fields, accept text only and build the query in application code.',64,322,1152,65,26);
-   line(s,64,406,1152);label(s,'LITERATURE COMPARISON',64,436,1100,C.blue);
-   box(s,'Text inserted into\nJavaScript source',64,483,310,85,C.blue,C.paleBlue,24);arr(s,395,516,54,C.blue);box(s,'JavaScript engine\nexecutes the source',473,483,315,85,C.blue,C.bg,24);arr(s,809,516,54,C.blue);t(s,'Changes program\nlogic',890,489,325,80,26,{bold:true,color:C.blue});
-   t(s,'Control: do not build code from user text; disable unused scripting.',64,594,1152,40,26);
-   t(s,'We measured the first row. The fixed $where probe checked the server setting only.',64,637,1152,30,19,{color:C.muted});break;
+   panel(s,64,164,544,438,C.paleRed,C.red,2);panel(s,672,164,544,438,C.paleBlue,C.blue,2);
+   label(s,'MEASURED IN OUR LAB',90,190,480,C.red);t(s,'Operator injection',90,238,480,45,32,{bold:true,color:C.red});
+   box(s,'Object contains\n$ne',90,311,202,82,C.red,C.white,23);arr(s,306,341,39,C.red);box(s,'MongoDB reads a\nquery condition',359,311,220,82,C.red,C.white,22);
+   t(s,'Result',90,421,100,28,19,{color:C.muted});t(s,'Different records match',90,454,470,37,27,{bold:true,color:C.red});line(s,90,505,470,C.red);t(s,'Defence: accept text only and build the query in application code.',90,526,470,59,21,{bold:true});
+   label(s,'LITERATURE COMPARISON',698,190,480,C.blue);t(s,'JavaScript injection',698,238,480,45,32,{bold:true,color:C.blue});
+   box(s,'Text enters\nJavaScript source',698,311,202,82,C.blue,C.white,22);arr(s,914,341,39,C.blue);box(s,'JavaScript engine\nexecutes it',967,311,220,82,C.blue,C.white,22);
+   t(s,'Result',698,421,100,28,19,{color:C.muted});t(s,'Program logic changes',698,454,470,37,27,{bold:true,color:C.blue});line(s,698,505,470,C.blue);t(s,'Defence: never build code from user text; disable unused scripting.',698,526,470,59,21,{bold:true});
+   t(s,'Different interpreter, different defence. We measured the operator route only.',64,620,1152,32,22,{bold:true,align:'center'});break;
   case 'findings':{
    const content=[['1','The attack succeeds','Operator object logs the attacker in as Alice','Session created\nHTTP 200',C.red],['2','The attack is stopped','Object rejected before MongoDB receives a query','No query sent\nHTTP 400',C.green],['3','Legitimate login still works','Correct credentials retain protected access','Access granted\nHTTP 200',C.blue]];
    content.forEach(([n,a,b,c,col],j)=>{const y=173+j*141;t(s,n,64,y,65,65,43,{bold:true,color:col});t(s,a,160,y,782,48,32,{bold:true});t(s,b,160,y+61,790,48,25,{color:C.muted});t(s,c,970,y+6,246,78,25,{bold:true,color:col});if(j<2)line(s,160,y+116,1056);});
    t(s,'Scope: one recorded stack, synthetic accounts and 15 request cases.',64,617,1152,40,24,{color:C.muted});break;}
   case 'conclusion':
-   t(s,'Choose the query structure.\nValidate values. Verify the password.',64,171,1152,143,45,{bold:true,color:C.white});
-   t(s,'NEXT QUESTION',64,364,1152,36,23,{bold:true,color:'#BAC8CC'});
-   t(s,'How can flexible search preserve customer separation?',64,415,1152,78,32,{bold:true,color:C.white});
-   box(s,'User-selected filter',64,530,390,73,'#BAC8CC',C.ink,27);t(s,'+',484,541,60,50,35,{color:C.white,bold:true});box(s,'Mandatory tenant rule',570,530,464,73,'#9FD3C7',C.ink,27);
-   t(s,'Proposed test: allowed filters vs a builder that always adds the tenant rule.',64,628,1152,32,20,{color:'#BAC8CC'});break;
+   t(s,'APPLICATION RULE',64,156,520,34,20,{bold:true,color:'#9FD3C7'});
+   t(s,'Choose the query structure.\nValidate input values.\nVerify the password.',64,207,535,150,34,{bold:true,color:C.white});
+   line(s,64,388,500,'#9FD3C7');
+   t(s,'NEXT STUDY',64,421,520,34,20,{bold:true,color:'#BAC8CC'});
+   t(s,'Can flexible search preserve\ncustomer separation?',64,466,535,88,30,{bold:true,color:C.white});
+   t(s,'User-selected filters must never override the tenant rule.',64,592,535,52,21,{color:'#9FD3C7',bold:true});break;
   case 'environment':
    tab(s,[['Component','Recorded value'],['MongoDB',evidence.environment.database],['Node.js',evidence.environment.node],['Express / native driver','5.1.0 / 6.20.0'],['Transport / parser','Loopback HTTP / JSON / express.json'],['Password verification','scrypt N=131072, r=8, p=1'],['Evidence','15 cases × 5 modes × 2 runs']],[440,712],165,403,25);
    t(s,'Original experiment record. Fresh browser captures: 1 November 2026.',64,606,1152,45,23,{color:C.muted});break;
@@ -141,10 +196,14 @@ export async function buildRevised(p,root){
    t(s,'The fixed $where expression tests configuration, not attacker-controlled JavaScript.',64,651,1080,30,18,{color:C.muted});break;
   case 'capture1':case 'capture2':{
    const attack=d.layout==='capture1',col=attack?C.red:C.green;
-   label(s,attack?'VULNERABLE LOGIN':'HARDENED LOGIN',64,155,1152,col);
-   t(s,'{"username":"alice","password":{"$ne":""}}',64,203,1152,61,30,{mono:true,color:col});
-   label(s,'SAME ATTACK REQUEST AND ACTUAL RESPONSE',64,294,1152,C.muted);
-   await image(s,attack?'fresh-02-evidence.png':'fresh-03-evidence.png',64,333,1152,320);
+   label(s,attack?'ATTACK SUCCEEDS':'ATTACK STOPPED',64,151,1152,col);
+   t(s,'{"username":"alice","password":{"$ne":""}}',64,199,1152,54,29,{mono:true,color:col,bold:true});
+   line(s,64,272,1152,col);
+   await image(s,attack?'fresh-02-evidence.png':'fresh-03-evidence.png',64,309,742,272);
+   vline(s,842,309,272,col);
+   const evidenceRows=attack?[['HTTP','Session created','200'],['DATABASE','Query sent','1 find'],['ACCESS','Alice’s notes exposed','granted']]:[['HTTP','Credential contract rejected','400'],['DATABASE','No query sent','0 find'],['ACCESS','Protected notes denied','denied']];
+   evidenceRows.forEach(([a,b,c],j)=>{const y=309+j*92;t(s,a,878,y,135,27,17,{bold:true,color:C.muted});t(s,b,878,y+29,218,42,22,{bold:true,color:col});t(s,c,1110,y+29,106,42,17,{bold:true,color:col,align:'right'});});
+   t(s,attack?'The vulnerable app treats a record match as password proof.':'The hardened app rejects the object before constructing a filter.',64,610,1152,38,24,{bold:true,color:col});
    break;}
   case 'limits':
    label(s,'ESTABLISHED',64,179,540,C.green);label(s,'NOT ESTABLISHED',704,179,510,C.muted);
