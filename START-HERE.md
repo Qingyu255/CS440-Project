@@ -1,11 +1,11 @@
 # CS440 NoSQL Injections: complete project pack
 
-Start with `deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pptx` and `deliverables/CS440-Team-Handover.docx`. The deck contains 13 main slides and 11 appendices. Planned content is 10:25, including a 90-second demo. Aim for a measured full rehearsal of 10:50–11:00 including handovers. These times are targets.
+Start with `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx` and `deliverables/CS440-Team-Handover.docx`. The deck contains 13 main slides and 11 appendices. Planned content is 10:25, including a 90-second demo. Aim for a measured full rehearsal of 10:50–11:00 including handovers. These times are targets.
 
 ## Files
 
-- `deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pptx`: upgraded cover and conclusion art, clearer mechanism and experiment layouts, editable diagrams, five native tables, embedded notes and standard click builds on slides 5 and 10.
-- `deliverables/CS440-NoSQL-Injections-Final-Deck-Visual-Upgrade.pdf`: portable 24-page copy with complete static states.
+- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx`: final presentation build with simplified audience-facing language, clearer mechanism and experiment layouts, editable diagrams, six native tables, embedded notes and standard click builds on slides 5 and 10.
+- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pdf`: portable 24-page copy with complete static states.
 - `deliverables/CS440-Team-Handover.docx`: core idea, plain explanation, pointing cues, transition and likely question for every slide; glossary and demo checklist.
 - `deliverables/Speaker-Script.md`: complete timed main-talk script.
 - `deliverables/Q-and-A-Defence-Pack.md`: 28 questions, short answers, technical follow-ups and evidence references.

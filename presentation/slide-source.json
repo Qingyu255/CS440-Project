@@ -41,7 +41,7 @@
   },
   {
     "slide": 6,
-    "title": "An object and a string behave differently",
+    "title": "The parsed type changes the query meaning",
     "notes": "Target time: 0:45\n\nThese inputs look similar but have different types. The first is an object, so MongoDB recognises the operator and Alice matches. The second is a string containing the same characters. In this query it stays ordinary text and fails to match her stored password. We tested that second case as a negative control. The attack also assumes that the endpoint accepts objects, Alice's stored password is non-empty, and any returned record creates a session. Those assumptions define the claim we can test.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/ne/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html\nProject evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.",
     "core": "The parsed type changes how MongoDB interprets the value.",
     "owner": "Pheobe Neo",
@@ -82,7 +82,7 @@
   {
     "slide": 11,
     "title": "Different injection types need different defences",
-    "notes": "Target time: 0:40\n\nThe first row is our measured attack. A JSON object contains dollar-ne, and MongoDB reads it as a query condition. That changes which record matches. Requiring text in login fields and building the query in application code stops this route. The second row comes from the literature. An application may insert user text into JavaScript source, and the JavaScript engine then executes changed program logic. Prevent that by never building code from user text and by disabling scripting when it is unused. We did not demonstrate the second attack. Our fixed dollar-where probe only checked whether scripting was enabled.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/where/\nhttps://www.infoq.com/articles/nosql-injections-analysis/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
+    "notes": "Target time: 0:40\n\nThe left column is our measured attack. A JSON object contains dollar-ne, and MongoDB reads it as a query condition. That makes the filter match without the correct password. Requiring text in login fields and building the query in application code stops this route. The right column comes from the literature. An application may insert user text into JavaScript source, and the JavaScript engine then executes changed program logic. Prevent that by never building code from user text and by disabling scripting when it is unused. We did not demonstrate the JavaScript attack. Our fixed dollar-where probe only checked whether scripting was enabled.\n\nSources: https://www.mongodb.com/docs/v7.0/reference/operator/query/where/\nhttps://www.infoq.com/articles/nosql-injections-analysis/\nhttps://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html",
     "core": "The right defence depends on how the system interprets the input.",
     "owner": "Liu Qingyu",
     "seconds": 40

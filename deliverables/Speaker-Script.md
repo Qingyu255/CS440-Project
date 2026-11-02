@@ -77,7 +77,7 @@ Point at: Use the three numbered stages. Point to body.password, then the substi
 
 Transition: That outcome depends on the input being an object rather than ordinary text.
 
-## Slide 6: An object and a string behave differently
+## Slide 6: The parsed type changes the query meaning
 
 Speaker: Pheobe Neo
 
@@ -158,13 +158,13 @@ Speaker: Liu Qingyu
 
 Target time: 0:40
 
-The first row is our measured attack. A JSON object contains dollar-ne, and MongoDB reads it as a query condition. That changes which record matches. Requiring text in login fields and building the query in application code stops this route. The second row comes from the literature. An application may insert user text into JavaScript source, and the JavaScript engine then executes changed program logic. Prevent that by never building code from user text and by disabling scripting when it is unused. We did not demonstrate the second attack. Our fixed dollar-where probe only checked whether scripting was enabled.
+The left column is our measured attack. A JSON object contains dollar-ne, and MongoDB reads it as a query condition. That makes the filter match without the correct password. Requiring text in login fields and building the query in application code stops this route. The right column comes from the literature. An application may insert user text into JavaScript source, and the JavaScript engine then executes changed program logic. Prevent that by never building code from user text and by disabling scripting when it is unused. We did not demonstrate the JavaScript attack. Our fixed dollar-where probe only checked whether scripting was enabled.
 
 Sources: https://www.mongodb.com/docs/v7.0/reference/operator/query/where/
 https://www.infoq.com/articles/nosql-injections-analysis/
 https://cheatsheetseries.owasp.org/cheatsheets/NoSQL_Security_Cheat_Sheet.html
 
-Point at: Read the first row as the measured experiment and the second as a literature comparison. State the different control beneath each row.
+Point at: Compare the columns row by row. State clearly that only the operator route was demonstrated.
 
 Transition: We can now state what our evidence actually establishes.
 
