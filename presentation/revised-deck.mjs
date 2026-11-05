@@ -22,18 +22,19 @@ export async function buildRevised(p,root){
  const node=(s,num,heading,body,x,y,w=220,color=C.blue)=>{t(s,num,x,y,w,44,34,{color,bold:true});line(s,x,y+57,w,color);t(s,heading,x,y+80,w,82,29,{bold:true,color});t(s,body,x,y+173,w,100,25);};
  const assetImage=async(s,name,alt,x,y,w,h,fit='cover')=>{s.images.add({blob:new Uint8Array(await fs.readFile(path.join(root,'presentation/assets',name))),contentType:'image/png',alt,fit,position:{left:x,top:y,width:w,height:h}});};
  for(let i=0;i<slides.length;i++){
-  const d=slides[i],s=p.slides.add(),dark=i===0||i===12;
+  const d=slides[i],s=p.slides.add(),dark=d.layout==='cover'||d.layout==='conclusion';
   stage=0;s.background.fill=dark?C.ink:C.bg;s.speakerNotes.textFrame.setText(notes(d));authored.push({slide:s,...d});
   if(i===0)await assetImage(s,'nosql-cover-hero-v2.png','Conceptual illustration of a document database authentication bypass',0,0,1280,720);
-  if(i===12)await assetImage(s,'query-control-future-work-v2.png','Conceptual illustration of fixed query policy preserving separated data',0,0,1280,720);
-  t(s,d.title,64,44,i===0?520:i===12?590:1152,94,i===0?28:i===12?38:41,{bold:true,color:dark?C.white:C.ink});
+  if(d.layout==='conclusion')await assetImage(s,'query-control-future-work-v2.png','Conceptual illustration of fixed query policy preserving separated data',0,0,1280,720);
+  t(s,d.title,64,44,i===0?520:d.layout==='conclusion'?590:1152,94,i===0?28:d.layout==='conclusion'?38:41,{bold:true,color:dark?C.white:C.ink});
   t(s,String(i+1).padStart(2,'0'),1144,672,72,28,18,{color:dark?'#BAC8CC':C.muted});
-  const foot=i<13?['Ron et al., 2016 / controlled local reproduction','MongoDB 7.0 $ne documentation / illustrative teaching record','Threat model / local synthetic records','Ron et al., 2016 / author manuscript and republication','C04 / native MongoDB driver / synthetic plaintext reproduction','','','','','Local source / OWASP NoSQL and password-storage guidance','Literature comparison / MongoDB 7.0 $where documentation','Recorded local experiment / results.json and results.csv','Proposed follow-up study / OWASP NoSQL guidance'][i]:'';
+  const footByLayout={cover:'Ron et al., 2016 / controlled local reproduction',primer:'MongoDB 7.0 $ne documentation / illustrative teaching record',flow:'Threat model / local synthetic records',landscape:'Ron et al., 2016 / author manuscript and republication',mechanism:'C04 / native MongoDB driver / synthetic plaintext reproduction',fix:'Local source / OWASP NoSQL and password-storage guidance',interpreters:'Literature comparison / MongoDB 7.0 $where documentation',findings:'Recorded local experiment / results.json and results.csv',conclusion:'Proposed follow-up study / OWASP NoSQL guidance'};
+  const foot=i<12?(footByLayout[d.layout]||''):'';
   if(foot)t(s,foot,64,671,1060,30,16,{color:dark?'#BAC8CC':C.muted});
   switch(d.layout){
   case 'cover':
    t(s,'A login without\nthe password',64,154,535,170,62,{bold:true,color:C.white});
-   t(s,'Operator injection in a controlled MongoDB login experiment',64,394,500,80,27,{bold:true,color:C.white});
+   t(s,'Reproducing operator injection from Ron et al. (2016)',64,394,500,80,27,{bold:true,color:C.white});
    t(s,'Five configurations and 150 recorded outcomes',64,492,500,50,22,{color:'#BAC8CC'});
    t(s,team.join('  /  '),64,582,565,36,19,{color:C.white});break;
   case 'primer':
@@ -65,7 +66,7 @@ export async function buildRevised(p,root){
    t(s,'Changes the query condition',459,230,360,70,29,{bold:true,color:C.red});arr(s,830,241,58,C.red);
    t(s,'A record matches\nwithout the correct\npassword',920,225,265,98,24,{bold:true,color:C.red});
    t(s,'Operator injection measured in our experiment',91,328,1040,29,19,{color:C.muted});
-   label(s,'OTHER BOUNDARIES DISCUSSED IN THE PAPER',64,409,1100,C.blue);
+   label(s,'OTHER BOUNDARIES IN RON ET AL. (2016)',64,409,1100,C.blue);
    const others=['Query text','JavaScript source','Protocol command','Trusted browser (CSRF)'];
    others.forEach((a,j)=>{const x=64+j*288;t(s,a,x,466,244,62,22,{bold:true,color:j===1?C.blue:C.ink});line(s,x,534,244,j===1?C.blue:C.line);});
    t(s,'Experiment focus: the operator route',64,578,1152,38,24,{bold:true,color:C.red,align:'center'});

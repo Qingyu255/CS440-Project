@@ -4,17 +4,17 @@ Reviewed 1 November 2026. The project briefing combines A/A+ in its highest band
 
 | Component | Course weight | Evidence in the final pack |
 |---|---:|---|
-| Presentation | 5% | Alice login story; editable explanatory diagrams and result matrix; 13 main slides with 10:25 content and 10:50–11:00 full-run target; complete notes; click builds; 90-second demo and refreshed fallback; named speaker handover guide |
+| Presentation | 5% | Alice login story; editable explanatory diagrams and result matrix; 12 main slides with 9:40 content and 10:10–10:30 full-run target; complete notes; click builds; 90-second demo and refreshed fallback; section-based handover guide |
 | Background | 3% | Slides 2–4: plain definitions of document, predicate, $ne, empty string and session; NoSQL families, architecture, threat model, five literature classes and authentication/access-control distinctions |
-| Approach | 10% | Slides 5-11: exact request and query semantics, assumptions, object versus literal control, 15 cases across five configurations repeated twice, actual command monitoring, protected-access checks, independently verified controls, isolated validation comparison, separate password verification and a sourced conceptual comparison with JavaScript injection |
-| Conclusion | 2% | Slides 12-13: evidence-linked findings, engineering lessons, scope and a bounded open problem on client-selected filters with mandatory ownership restrictions |
-| Q&A | Within relevant components | Appendices 14-24 and 28-question defence pack; environment, code, case tables, independent controls, actual captures, limits and references |
+| Approach | 10% | Slides 5-10 and appendix 13: exact request and query semantics, assumptions, object versus literal control, 15 cases across five configurations repeated twice, actual command monitoring, protected-access checks, independently verified controls, isolated validation comparison, separate password verification and a sourced conceptual comparison with JavaScript injection |
+| Conclusion | 2% | Slides 11-12: evidence-linked findings, engineering lessons, scope and a bounded open problem on client-selected filters with mandatory ownership restrictions |
+| Q&A | Within relevant components | Appendices 13-24 and 28-question defence pack; experimental design, environment, code, case tables, independent controls, actual captures, limits and references |
 
 ## Evidence and preparation
 
 The lab records 150 login configuration/case observations and a protected-endpoint check for each, plus independent configuration probes. Supplementary regressions check session carry-over, content type, logout, request size and startup isolation. Control-probe unit tests specifically prevent unexpected success or unrelated errors from becoming false evidence.
 
-The 24-slide deck contains five editable tables, explanatory diagrams and embedded notes. Standard PowerPoint builds on slides 5 and 10 support staged explanations; the PDF retains all content. The 15-page team handover explains every slide and appendix. Fresh PNG evidence replaces the earlier JPEG crops, and the 90-second video uses those authentic states. The target full run is 10:50–11:00 including handovers.
+The 24-slide deck contains six editable tables, explanatory diagrams and embedded notes. Standard PowerPoint builds on slides 5 and 9 support staged explanations; the PDF retains all content. The team handover organises the talk into four assignable sections and gives every appendix a starting owner. Fresh PNG evidence replaces the earlier JPEG crops, and the 90-second video uses those authentic states. The target full run is 10:10–10:30 including handovers.
 
 See `../research/Claim-Ledger.md` for each claim's source, observation and scope. Test and authoring diagnostics remain separate from the deck.
 

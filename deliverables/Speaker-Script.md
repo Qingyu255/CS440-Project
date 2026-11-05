@@ -1,14 +1,20 @@
-# CS440 NoSQL Injections speaker script
+# CS440 NoSQL Injections section script
 
-13 main slides. Planned content: 10:25 including the 90-second demo. Allow about 25 seconds for handovers and navigation. Aim for a measured full run of 10:50 to 11:00. These are rehearsal targets, not measured delivery times.
+12 main slides. Planned content: 9:40 including the 90-second demo. Choose one presenter for each section, then write the assignments into the blanks below. Allow about 25 seconds for handovers and navigation. Aim for a measured full run of 10:10 to 10:30. These are rehearsal targets, not measured delivery times.
 
-## Slide 1: NoSQL injections
+## Section A: Problem and article context
 
-Speaker: Ercong Kee
+Slides 1-3  |  2:00  |  Assigned presenter: ____________________
+
+Section purpose: Introduce the assigned article, teach the minimum MongoDB vocabulary and show where the login decision fails.
+
+Incoming handover: Open with the Alice login consequence.
+
+### Slide 1: NoSQL injections
 
 Target time: 0:20
 
-Imagine logging in as Alice without knowing her password. Our local experiment does exactly that. We follow one small change in a request through the database and into a false login, then test which defences actually stop it.
+Today we examine Ron, Shulman-Peleg and Puzanov's 2016 IEEE Security & Privacy article on NoSQL injections. We clarify its attack taxonomy, then reproduce one operator-injection route in a controlled local experiment. Imagine logging in as Alice without knowing her password. We follow one small change in a request through the database and into a false login, then test which defences actually stop it.
 
 Sources: https://research.ibm.com/publications/analysis-and-mitigation-of-nosql-injections
 Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.
@@ -17,9 +23,7 @@ Point at: Point to the ordinary password and then the object that replaces it. I
 
 Transition: First, we need just two MongoDB ideas: records and query conditions.
 
-## Slide 2: A query is a test on a record
-
-Speaker: Ercong Kee
+### Slide 2: A query is a test on a record
 
 Target time: 0:55
 
@@ -32,9 +36,7 @@ Point at: Read both conditions aloud in English. Trace the same password field i
 
 Transition: An operator is legitimate database syntax. The failure begins when the client gets to choose it.
 
-## Slide 3: Where the login goes wrong
-
-Speaker: Ercong Kee
+### Slide 3: Where the login goes wrong
 
 Target time: 0:45
 
@@ -47,9 +49,17 @@ Point at: Trace the numbered flow. Pause at the application-to-query boundary, t
 
 Transition: The assigned paper shows several ways input can cross a boundary like this.
 
-## Slide 4: The paper covers several attack boundaries
+Section handover: The assigned article shows several ways input can cross a boundary like this.
 
-Speaker: Pheobe Neo
+## Section B: Article scope and operator mechanism
+
+Slides 4-6  |  2:25  |  Assigned presenter: ____________________
+
+Section purpose: Map Ron et al.'s wider taxonomy, then explain the operator route and the object-versus-string control.
+
+Incoming handover: Connect the false-login boundary to Ron et al.'s wider taxonomy.
+
+### Slide 4: Ron et al. describe several injection boundaries
 
 Target time: 0:40
 
@@ -62,9 +72,7 @@ Point at: Start with the highlighted operator route. Sweep across the other boun
 
 Transition: Here is the exact request used in our experiment.
 
-## Slide 5: The password value becomes a condition
-
-Speaker: Pheobe Neo
+### Slide 5: The password value becomes a condition
 
 Target time: 1:00
 
@@ -77,9 +85,7 @@ Point at: Use the three numbered stages. Point to body.password, then the substi
 
 Transition: That outcome depends on the input being an object rather than ordinary text.
 
-## Slide 6: The parsed type changes the query meaning
-
-Speaker: Pheobe Neo
+### Slide 6: The parsed type changes the query meaning
 
 Target time: 0:45
 
@@ -91,29 +97,23 @@ Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5
 
 Point at: Follow the two horizontal lanes. Emphasise the outer quotation marks around the second value, not just the $ sign.
 
-Transition: We kept those assumptions fixed while comparing five configurations.
+Transition: Now we can submit the same object to the vulnerable and hardened paths.
 
-## Slide 7: How we tested the controls
+Section handover: Now we can submit the same object to the vulnerable and hardened paths.
 
-Speaker: Kendrick Poon
+## Section C: Demo and measured results
 
-Target time: 0:45
+Slides 7-8  |  2:30  |  Assigned presenter: ____________________
 
-We ran fifteen request cases through five configurations, twice. The cases include the attack, correct and wrong passwords, and unexpected input shapes. For each request we recorded the login result, protected-page access and actual MongoDB find commands. Separate probes verified that scripting really was disabled and the read-only account really could not write. The validation-only configuration retains the vulnerable query after validation, so it isolates the effect of rejecting objects. The two runs show repeatability in this lab. They do not estimate attack prevalence.
+Section purpose: Demonstrate the vulnerable and hardened outcomes, then compare all five tested configurations.
 
-Sources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.
+Incoming handover: Move from the mechanism to the unchanged request used in the live demo.
 
-Point at: Trace cases into the five branches, then into the three outcome measures. Mention the independent control probes before discussing results.
-
-Transition: The live demo shows four of those recorded outcomes.
-
-## Slide 8: Same attack, different login decision
-
-Speaker: Kendrick Poon
+### Slide 7: Same attack, different login decision
 
 Target time: 1:30
 
-First, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path accepts the attack, logs us in as Alice and opens her synthetic private notes. We submit the same attack request to the hardened path. It rejects the object before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.
+We tested fifteen request cases across five configurations twice. This demo shows four recorded outcomes. First, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path accepts the attack, logs us in as Alice and opens her synthetic private notes. We submit the same attack request to the hardened path. It rejects the object before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.
 
 Sources: Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5 configurations × 2 runs.
 
@@ -121,9 +121,7 @@ Point at: Use 15 seconds for wrong password, 25 for the successful attack, 25 fo
 
 Transition: The full comparison tells us why some familiar controls did not stop it.
 
-## Slide 9: Which controls stopped the attack?
-
-Speaker: Kendrick Poon
+### Slide 8: Which controls stopped the attack?
 
 Target time: 1:00
 
@@ -136,9 +134,17 @@ Point at: Read the plain-language attack outcome first, then whether a query was
 
 Transition: The safe login flow explains why the attack stops.
 
-## Slide 10: A safe login keeps the password out of the query
+Section handover: The safe login flow explains why the effective controls work.
 
-Speaker: Liu Qingyu
+## Section D: Defence evidence boundary and conclusion
+
+Slides 9-12  |  2:45  |  Assigned presenter: ____________________
+
+Section purpose: Explain the complete login fix, distinguish operator and JavaScript injection, state the evidence boundary and close with future work.
+
+Incoming handover: Use the result matrix to motivate the safe login design.
+
+### Slide 9: A safe login keeps the password out of the query
 
 Target time: 0:50
 
@@ -152,9 +158,7 @@ Point at: Start with the sentence explaining why the object is rejected. Then fo
 
 Transition: The next distinction explains why a string type check is not a universal injection defence.
 
-## Slide 11: Different injection types need different defences
-
-Speaker: Liu Qingyu
+### Slide 10: Different injection types need different defences
 
 Target time: 0:40
 
@@ -168,9 +172,7 @@ Point at: Compare the columns row by row. State clearly that only the operator r
 
 Transition: We can now state what our evidence actually establishes.
 
-## Slide 12: What our experiment shows
-
-Speaker: Liu Qingyu
+### Slide 11: What our experiment shows
 
 Target time: 0:35
 
@@ -182,9 +184,7 @@ Point at: Read the three security outcomes. Treat the HTTP codes as secondary ev
 
 Transition: The remaining question is how to preserve this control when an API intentionally accepts richer filters.
 
-## Slide 13: The application must keep control of the query
-
-Speaker: Liu Qingyu
+### Slide 12: The application must keep control of the query
 
 Target time: 0:40
 
@@ -196,3 +196,5 @@ Project evidence: nosql-lab/evidence/results.json and results.csv; 15 cases × 5
 Point at: End on the application rule, then use the tenant-search sketch to make the open problem concrete. Do not imply that the proposed search defence has been tested.
 
 Transition: Thank the audience and invite questions. Use the appendix index in the handover guide to jump directly to evidence.
+
+Section handover: Invite questions and use the appendix responsibility map.

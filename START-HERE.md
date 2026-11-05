@@ -1,11 +1,11 @@
 # CS440 NoSQL Injections: complete project pack
 
-Start with `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx` and `deliverables/CS440-Team-Handover.docx`. The deck contains 13 main slides and 11 appendices. Planned content is 10:25, including a 90-second demo. Aim for a measured full rehearsal of 10:50–11:00 including handovers. These times are targets.
+Start with `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pptx` and `deliverables/CS440-Team-Handover.docx`. The deck contains 12 main slides and 12 appendices. Planned content is 9:40, including a 90-second demo. Aim for a measured full rehearsal of 10:10–10:30 including handovers. These times are targets.
 
 ## Files
 
-- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx`: final presentation build with simplified audience-facing language, clearer mechanism and experiment layouts, editable diagrams, six native tables, embedded notes and standard click builds on slides 5 and 10.
-- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pdf`: portable 24-page copy with complete static states.
+- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pptx`: final presentation build with 12 main slides, section-based handovers, six native tables, embedded notes and standard click builds on slides 5 and 9.
+- `deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pdf`: portable 24-page copy with complete static states.
 - `deliverables/CS440-Team-Handover.docx`: core idea, plain explanation, pointing cues, transition and likely question for every slide; glossary and demo checklist.
 - `deliverables/Speaker-Script.md`: complete timed main-talk script.
 - `deliverables/Q-and-A-Defence-Pack.md`: 28 questions, short answers, technical follow-ups and evidence references.
@@ -29,7 +29,7 @@ Wait for LOCAL LAB READY. Open http://127.0.0.1:4400. In a second terminal, run 
 
 ## Remaining group actions
 
-Suggested blocks follow the supplied order: Ercong Kee 1–3, Pheobe Neo 4–6, Kendrick Poon 7–9 including the demo, Liu Qingyu 10–13. Rehearse with the timer, handovers and a deliberate demo failure. Run the lab and check the click builds on the presentation machine. The author manuscript confirms the taxonomy; check the publisher copy if adding publisher page references. Every member must present, attend Q&A and individually submit by the required deadline.
+Choose one presenter for each section: A covers slides 1–3, B covers 4–6, C covers 7–8 including the demo, and D covers 9–12. Rehearse with the timer, handovers and a deliberate demo failure. Run the lab and check the click builds on the presentation machine. Every member must present, attend Q&A and individually submit by the required deadline.
 
 The briefing combines A/A+ in one band. This pack addresses that band; the actual grade also depends on your delivery, understanding and Q&A.
 

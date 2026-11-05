@@ -12,9 +12,9 @@ export const refs={
  repo:'https://github.com/Qingyu255/CS440-Project/tree/c8252d2bb3baeb543a011992e2a79ee2123ecfec'
 };
 const slide=(title,seconds,core,script,point,transition,question,answer,sources,layout)=>({title,seconds,core,script,point,transition,question,answer,sources,layout});
-export const slides=[
+const sourceSlides=[
  slide('NoSQL injections',20,'A login can accept valid JSON yet grant access without a password.',
- `Imagine logging in as Alice without knowing her password. Our local experiment does exactly that. We follow one small change in a request through the database and into a false login, then test which defences actually stop it.`,
+ `Today we examine Ron, Shulman-Peleg and Puzanov's 2016 IEEE Security & Privacy article on NoSQL injections. We clarify its attack taxonomy, then reproduce one operator-injection route in a controlled local experiment. Imagine logging in as Alice without knowing her password. We follow one small change in a request through the database and into a false login, then test which defences actually stop it.`,
  'Point to the ordinary password and then the object that replaces it. Introduce the consequence before the syntax.',
  'First, we need just two MongoDB ideas: records and query conditions.',
  'Are you demonstrating a new vulnerability?','No. We reproduce a mechanism discussed by Ron and colleagues, then compare controls in a recorded local stack.',['publication','evidence'],'cover'),
@@ -28,7 +28,7 @@ export const slides=[
  'Trace the numbered flow. Pause at the application-to-query boundary, then follow the returned record to the session and private notes.',
  'The assigned paper shows several ways input can cross a boundary like this.',
  'Is this authentication or authorization?','The false session is an authentication failure. The protected-page check shows its confidentiality consequence. Database service-account permissions are a different authorization layer.',['paper','evidence'],'flow'),
- slide('The paper covers several attack boundaries',40,'The literature is broader than the one mechanism we test.',
+ slide('Ron et al. describe several injection boundaries',40,'The article is broader than the one mechanism we test.',
  `Ron and colleagues describe five classes. We group their query examples together here, and keep the original names in the small labels. Other inputs can become JavaScript source or an extra protocol command. Their origin-violation example is cross-site request forgery: a browser performs an unwanted action using a user's authority. Our experiment tests the highlighted operator route. Later we compare it with JavaScript injection conceptually. The research question is which controls stop this attack from creating a login session.`,
  'Start with the highlighted operator route. Sweep across the other boundaries once; do not teach five exploits. Explain CSRF in one sentence.',
  'Here is the exact request used in our experiment.',
@@ -41,7 +41,7 @@ export const slides=[
  slide('The parsed type changes the query meaning',45,'The parsed type changes how MongoDB interprets the value.',
  `These inputs look similar but have different types. The first is an object, so MongoDB recognises the operator and Alice matches. The second is a string containing the same characters. In this query it stays ordinary text and fails to match her stored password. We tested that second case as a negative control. The attack also assumes that the endpoint accepts objects, Alice's stored password is non-empty, and any returned record creates a session. Those assumptions define the claim we can test.`,
  'Follow the two horizontal lanes. Emphasise the outer quotation marks around the second value, not just the $ sign.',
- 'We kept those assumptions fixed while comparing five configurations.',
+ 'Now we can submit the same object to the vulnerable and hardened paths.',
  'Would blocking the dollar sign solve the whole problem?','A blacklist is brittle and endpoint-dependent. Our login requires two validated strings and an application-defined query, with independent password verification in the full fix.',['ne','nosql','evidence'],'types'),
  slide('How we tested the controls',45,'The comparison changes the control and records the same security outcomes.',
  `We ran fifteen request cases through five configurations, twice. The cases include the attack, correct and wrong passwords, and unexpected input shapes. For each request we recorded the login result, protected-page access and actual MongoDB find commands. Separate probes verified that scripting really was disabled and the read-only account really could not write. The validation-only configuration retains the vulnerable query after validation, so it isolates the effect of rejecting objects. The two runs show repeatability in this lab. They do not estimate attack prevalence.`,
@@ -49,7 +49,7 @@ export const slides=[
  'The live demo shows four of those recorded outcomes.',
  'Are these 150 different attacks?','No. They are 15 cases × 5 configurations × 2 repetitions. Some cases are positive or negative controls, and repetitions are not independent populations.',['evidence'],'experiment'),
  slide('Same attack, different login decision',90,'The fix stops the attack while preserving correct login.',
- `First, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path accepts the attack, logs us in as Alice and opens her synthetic private notes. We submit the same attack request to the hardened path. It rejects the object before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.`,
+ `We tested fifteen request cases across five configurations twice. This demo shows four recorded outcomes. First, a wrong password fails and Alice's notes stay closed. Next, we replace only the password value with the operator object. The vulnerable path accepts the attack, logs us in as Alice and opens her synthetic private notes. We submit the same attack request to the hardened path. It rejects the object before any database query and denies access. Finally, the correct credentials still log in successfully. That last check matters: rejecting every request would stop the attack but would also break the application. The captured results on this slide preserve the evidence if the live service fails.`,
  'Use 15 seconds for wrong password, 25 for the successful attack, 25 for the same attack after the fix, and 25 for correct login. Keep the payload visible. Switch to the video or slide captures within ten seconds of a failure.',
  'The full comparison tells us why some familiar controls did not stop it.',
  'Could an existing session explain the result?','Each matrix check verifies protected access. Additional regression tests authenticate first, then reject a later login and confirm the old session is invalidated.',['evidence'],'demo'),
@@ -105,12 +105,26 @@ export const slides=[
  slide('What remains untested',0,'The conclusions are bounded by the experimental design.',
  'The study establishes that this operator payload creates a login session in the vulnerable path and records how the tested controls respond. It does not measure deployed prevalence, prove administrator access, cover all drivers or MongoDB versions, demonstrate JavaScript injection, or certify production security. A tenant-filter experiment is a proposed next study.',
  'Use this slide when a question generalises beyond the evidence.', '', 'What is the main limitation?','A deliberately vulnerable local login with synthetic records and a fixed set of input cases cannot establish the security of arbitrary applications.',['evidence','nosql'],'limits'),
- slide('Paper and database references',0,'The technical claims have traceable primary sources.',
+ slide('Article and database references',0,'The technical claims have traceable primary sources.',
  'Publication identity follows the IBM record and DOI 10.1109/MSP.2016.36. The authors’ InfoQ republication and author-uploaded manuscript were checked for the five classes. The publisher library proxy remained unavailable; the author manuscript is not claimed to be the final typeset version. No original page or figure numbers are asserted. MongoDB semantics are linked to version 7.0 documentation.',
  'Use the author manuscript for taxonomy and the versioned documentation for operator semantics.', '', 'Did you read the exact publisher PDF?','The proxy was unavailable. We checked the author-uploaded manuscript and authors’ republication and disclose that source limitation.',['publication','manuscript','paper','ne','where'],'references1'),
  slide('Defences and reproducible evidence',0,'The repository connects claims to code and recorded outcomes.',
  'The immutable evidence commit is c8252d2bb3baeb543a011992e2a79ee2123ecfec. It records the source and experiment used for this study. The repository’s current revision adds redesigned slides, fresh browser captures and team handover materials. OWASP provides complementary guidance. The local teaching application is not a production deployment template.',
  'Use the repository URL and immutable evidence commit. The QR code is supplementary to the written link.', '', 'How can another group reproduce it?','Follow nosql-lab/README.md, use the recorded MongoDB version, start isolated loopback instances, then run test:all. The repository verifier checks the committed results and deck.',['nosql','password','repo'],'references2')
 ];
-export function owner(i){return i<3?team[0]:i<6?team[1]:i<9?team[2]:team[3];}
+
+// Keep the methods slide for Q&A without interrupting the main narrative.
+export const slides=[...sourceSlides.slice(0,6),...sourceSlides.slice(7,13),sourceSlides[6],...sourceSlides.slice(13)];
+export const mainSlideCount=12;
+export const sections=[
+ {id:'A',title:'Problem and article context',start:1,end:3,seconds:120,purpose:'Introduce the assigned article, teach the minimum MongoDB vocabulary and show where the login decision fails.',incoming:'Open with the Alice login consequence.',outgoing:'The assigned article shows several ways input can cross a boundary like this.'},
+ {id:'B',title:'Article scope and operator mechanism',start:4,end:6,seconds:145,purpose:'Map Ron et al.\'s wider taxonomy, then explain the operator route and the object-versus-string control.',incoming:'Connect the false-login boundary to Ron et al.\'s wider taxonomy.',outgoing:'Now we can submit the same object to the vulnerable and hardened paths.'},
+ {id:'C',title:'Demo and measured results',start:7,end:8,seconds:150,purpose:'Demonstrate the vulnerable and hardened outcomes, then compare all five tested configurations.',incoming:'Move from the mechanism to the unchanged request used in the live demo.',outgoing:'The safe login flow explains why the effective controls work.'},
+ {id:'D',title:'Defence evidence boundary and conclusion',start:9,end:12,seconds:165,purpose:'Explain the complete login fix, distinguish operator and JavaScript injection, state the evidence boundary and close with future work.',incoming:'Use the result matrix to motivate the safe login design.',outgoing:'Invite questions and use the appendix responsibility map.'}
+];
+const appendixSection={13:'C',14:'C',15:'B',16:'D',17:'C',18:'C',19:'C',20:'C',21:'C',22:'D',23:'B',24:'D'};
+export function sectionForSlide(number){
+ const id=number<=mainSlideCount?sections.find(s=>number>=s.start&&number<=s.end)?.id:appendixSection[number];
+ return sections.find(s=>s.id===id);
+}
 export function notes(s){return `Target time: ${s.seconds?`${Math.floor(s.seconds/60)}:${String(s.seconds%60).padStart(2,'0')}`:'Q&A'}\n\n${s.script}\n\nSources: ${s.sources.map(k=>refs[k]).join('\n')}`;}

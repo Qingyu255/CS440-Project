@@ -4,12 +4,12 @@
 
 A controlled investigation of NoSQL query-operator injection for the CS440 group project. Based on Ron, Shulman-Peleg and Puzanov, *Analysis and Mitigation of NoSQL Injections*, IEEE Security & Privacy 14(2), 30-39 (2016), DOI [10.1109/MSP.2016.36](https://doi.org/10.1109/MSP.2016.36).
 
-The local synthetic lab follows an injected JSON request through query construction, false authentication and protected-data access, then compares five configurations. The presentation teaches MongoDB basics through Alice’s login, maps the literature, and compares operator injection with JavaScript injection. It contains 13 main slides and 11 appendices. Planned content is 10:25 including a 90-second demo; the full rehearsal target is 10:50–11:00 with handovers.
+The local synthetic lab follows an injected JSON request through query construction, false authentication and protected-data access, then compares five configurations. The presentation teaches MongoDB basics through Alice’s login, maps the literature, and compares operator injection with JavaScript injection. It contains 12 main slides and 12 appendices. Planned content is 9:40 including a 90-second demo; the full rehearsal target is 10:10–10:30 with handovers.
 
 ## Presentation and preparation
 
-- [Editable final deck](deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx)
-- [Portable final PDF](deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pdf)
+- [Editable final deck](deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pptx)
+- [Portable final PDF](deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pdf)
 - [Team handover guide](deliverables/CS440-Team-Handover.docx)
 - [Speaker script](deliverables/Speaker-Script.md)
 - [Q&A defence pack](deliverables/Q-and-A-Defence-Pack.md)

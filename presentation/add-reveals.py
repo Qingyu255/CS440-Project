@@ -6,7 +6,7 @@ path=Path(sys.argv[1])
 ns={'p':'http://schemas.openxmlformats.org/presentationml/2006/main'}
 def element(name,**attrs):return E.Element('{'+ns['p']+'}'+name,**{k:str(v) for k,v in attrs.items()})
 with zipfile.ZipFile(path) as z: entries={n:z.read(n) for n in z.namelist()}
-for number in (5,10):
+for number in (5,9):
  key=f'ppt/slides/slide{number}.xml';root=E.fromstring(entries[key]);groups={}
  for node in root.findall('.//p:cNvPr',ns):
   name=node.get('name','')
@@ -35,4 +35,4 @@ for number in (5,10):
  root.append(timing);entries[key]=E.tostring(root,xml_declaration=True,encoding='UTF-8',standalone=True)
 with zipfile.ZipFile(path,'w',zipfile.ZIP_DEFLATED) as z:
  for name,data in entries.items():z.writestr(name,data)
-print('Added standard click builds on slides 5 and 10; static PDF retains complete content.')
+print('Added standard click builds on slides 5 and 9; static PDF retains complete content.')

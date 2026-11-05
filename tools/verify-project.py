@@ -32,12 +32,12 @@ for a,b in zip(rows,csv_rows):
         assert str(a[key])==b[key]
 source = json.loads((root/'presentation/slide-source.json').read_text()); assert len(source)==24
 planned_seconds=0
-for slide in source[:13]:
+for slide in source[:12]:
     match=re.match(r'Target time: ([0-9]+):([0-9]{2})',slide['notes']); assert match
     planned_seconds+=int(match[1])*60+int(match[2])
 assert planned_seconds < 720, 'Planned main talk must stay below the 12-minute hard stop'
 ns={'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
-with zipfile.ZipFile(root/'deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v2.pptx') as z:
+with zipfile.ZipFile(root/'deliverables/CS440-NoSQL-Injections-Final-Deck-Excellent-v5.pptx') as z:
     assert z.testzip() is None
     slides=[n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide[0-9]+\.xml',n)]
     notes=[n for n in z.namelist() if re.fullmatch(r'ppt/notesSlides/notesSlide[0-9]+\.xml',n)]

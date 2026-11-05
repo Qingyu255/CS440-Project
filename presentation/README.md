@@ -2,7 +2,7 @@
 
 The final PPTX keeps text, explanatory diagrams and six tables editable. Two generated editorial illustrations are project assets used only on the cover and closing slide; experimental results and evidence remain native objects or authentic browser captures. Main-talk notes are also in `../deliverables/Speaker-Script.md`. `slide-source.json` contains titles, notes, core ideas, owners and timing for all 24 slides.
 
-`revised-content.mjs` holds narration, core ideas, transitions and questions. `revised-deck.mjs` defines the editable 1280 × 720 layouts and reads the measured results. `build-deck.mjs` and `finalize-revised.mjs` materialize local image bytes and validate the file. A live-session source snapshot alone is insufficient to package image assets. `add-reveals.py` adds standard click builds on slides 5 and 10 before final validation. Check builds in the actual presentation application.
+`revised-content.mjs` holds narration, section boundaries, transitions and questions. `revised-deck.mjs` defines the editable 1280 × 720 layouts and reads the measured results. `build-deck.mjs` and `finalize-revised.mjs` materialize local image bytes and validate the file. A live-session source snapshot alone is insufficient to package image assets. `add-reveals.py` adds standard click builds on slides 5 and 9 before final validation. Check builds in the actual presentation application.
 
 ## Rebuild with Codex's bundled artifact runtime
 
